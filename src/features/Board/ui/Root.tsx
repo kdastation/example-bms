@@ -1,78 +1,65 @@
-import React from 'react'
-import { Layer, Stage, Star, Text } from 'react-konva'
+import Konva from 'konva'
+import { useState } from 'react'
+import { Group, KonvaNodeComponent, Layer, Line, Shape, Stage } from 'react-konva'
 
-function generateShapes() {
-  return [...Array(10)].map((_, i) => ({
-    id: i.toString(),
-    x: Math.random() * 500,
-    y: Math.random() * 500,
-    rotation: Math.random() * 180,
-    isDragging: false,
-  }))
-}
+import { Rectangle } from './Rectangle'
 
-const INITIAL_STATE = generateShapes()
+const initialRectangles = [
+  {
+    x: 10,
+    y: 10,
+    width: 100,
+    height: 100,
+    fill: 'red',
+    id: 'rect1',
+  },
+  {
+    x: 150,
+    y: 150,
+    width: 100,
+    height: 100,
+    fill: 'green',
+    id: 'rect2',
+  },
+] as const
 
 export const Root = () => {
-  const [stars, setStars] = React.useState(INITIAL_STATE)
+  const [rectangles, setRectangles] = useState(initialRectangles)
+  const [selectedId, selectShape] = useState<string | null>(null)
 
-  const handleDragStart = (e) => {
-    const id = e.target.id()
-    setStars(
-      stars.map((star) => {
-        return {
-          ...star,
-          isDragging: star.id === id,
-        }
-      })
-    )
-  }
-  const handleDragEnd = (e) => {
-    setStars(
-      stars.map((star) => {
-        return {
-          ...star,
-          isDragging: false,
-        }
-      })
-    )
+  const checkDeselect = (e) => {
+    const clickedOnEmpty = e.target === e.target.getStage()
+
+    if (clickedOnEmpty) {
+      selectShape(null)
+    }
   }
 
   return (
     <Stage
-      style={{
-        border: '1px solid black',
-        width: 'fit-content',
-      }}
-      width={500}
-      height={500}
+      width={window.innerWidth}
+      height={window.innerHeight}
+      onMouseDown={checkDeselect}
+      onTouchStart={checkDeselect}
     >
       <Layer>
-        <Text text='Try to drag a star' />
-        {stars.map((star) => (
-          <Star
-            key={star.id}
-            id={star.id}
-            x={star.x}
-            y={star.y}
-            numPoints={5}
-            innerRadius={20}
-            outerRadius={40}
-            fill='#89b717'
-            opacity={0.8}
-            draggable
-            rotation={star.rotation}
-            shadowColor='black'
-            shadowBlur={10}
-            shadowOpacity={0.6}
-            shadowOffsetX={star.isDragging ? 10 : 5}
-            shadowOffsetY={star.isDragging ? 10 : 5}
-            scaleX={star.isDragging ? 1.2 : 1}
-            scaleY={star.isDragging ? 1.2 : 1}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          />
-        ))}
+        {rectangles.map((rect, i) => {
+          return (
+            <Rectangle
+              key={i}
+              shapeProps={rect}
+              isSelected={rect.id === selectedId}
+              onSelect={() => {
+                selectShape(rect.id)
+              }}
+              onChange={(newAttrs) => {
+                const rects = rectangles.slice()
+                rects[i] = newAttrs
+                setRectangles(rects)
+              }}
+            />
+          )
+        })}
       </Layer>
     </Stage>
   )
