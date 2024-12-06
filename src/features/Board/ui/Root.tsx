@@ -135,6 +135,10 @@ const Transform = ({ ids }: { ids: string[] }) => {
   )
 }
 
+const getShapesCanBeSelect = (stage: Konva.Stage) => {
+  return stage.find('.rectangle')
+}
+
 const useSelectController = ({
   onSelect,
   selected,
@@ -226,11 +230,6 @@ const useSelectController = ({
       updateSelectionRect()
       return
     }
-    //
-    // if (selected.length > 1) {
-    //   updateSelectionRect()
-    //   return
-    // }
 
     const selBox = rectRef.current?.getClientRect()
 
@@ -238,7 +237,7 @@ const useSelectController = ({
       return
     }
 
-    const selectableShapes = stage.find('.rectangle')
+    const selectableShapes = getShapesCanBeSelect(stage)
 
     const shapesInRect = selectableShapes.filter((elementNode) => {
       const elementBox = elementNode.getClientRect()
@@ -252,7 +251,6 @@ const useSelectController = ({
   }
 
   const onClick = (e) => {
-    // if we are selecting with rect, do nothing
     const { x1, x2, y1, y2 } = selection.current
 
     const moved = x1 !== x2 || y1 !== y2
@@ -272,7 +270,6 @@ const useSelectController = ({
       return
     }
 
-    // do we pressed shift or ctrl?
     const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey
 
     const isSelected = selected.length > 0
