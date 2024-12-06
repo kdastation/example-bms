@@ -20,7 +20,7 @@ const Rectangle = ({ shapeProps, onChange }) => {
     <Rect
       ref={shapeRef}
       {...shapeProps}
-      name='rectangle'
+      name='rectangle selectable'
       draggable
       onDragEnd={(e) => {
         console.log(e.target.id(), e.target.x(), e.target.y())
@@ -136,7 +136,15 @@ const Transform = ({ ids }: { ids: string[] }) => {
 }
 
 const getShapesCanBeSelect = (stage: Konva.Stage) => {
-  return stage.find('.rectangle')
+  return stage.find((node) => {
+    const attrs = node.attrs
+
+    if (!attrs || !attrs.name) {
+      return false
+    }
+
+    return attrs.name.includes('selectable')
+  })
 }
 
 const useSelectController = ({
