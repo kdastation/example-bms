@@ -4,6 +4,7 @@ import { Layer, Stage } from 'react-konva'
 
 import { mergeRefs } from '@shared/react/lib/mergeRefs'
 
+import { Circle, type CircleData } from './Circle'
 import { useSelectController } from './contoller/useSelectController'
 import { Image, type ImageData } from './Image'
 import { Rectangle, type RectangleData } from './Rectangle'
@@ -18,7 +19,11 @@ type ImageShape = ImageData & {
   type: 'image'
 }
 
-type ShapeData = RectangleShape | ImageShape
+type CircleShape = CircleData & {
+  type: 'circle'
+}
+
+type ShapeData = RectangleShape | ImageShape | CircleShape
 
 const initialRectangles: ShapeData[] = [
   {
@@ -61,6 +66,15 @@ const initialRectangles: ShapeData[] = [
     height: 300,
     src: 'https://p.turbosquid.com/ts-thumb/sC/TOOTGK/10EZr9Lr/10/jpg/1445892121/600x600/fit_q87/e696373449ba51fba8734edcda4dca4f780585b4/10.jpg',
   },
+  {
+    x: 300,
+    y: 600,
+    width: 100,
+    height: 100,
+    fill: 'green',
+    id: 'circle1',
+    type: 'circle',
+  },
 ]
 
 export const Root = () => {
@@ -88,6 +102,26 @@ export const Root = () => {
       >
         <Layer>
           {rectangles.map((rect, i) => {
+            if (rect.type === 'circle') {
+              return (
+                <Circle
+                  key={rect.id}
+                  {...rect}
+                  onChange={(newAttrs) => {
+                    setRectangles((prevState) => {
+                      const rects = prevState.slice()
+                      rects[i] = {
+                        ...rects[i],
+                        ...newAttrs,
+                      }
+
+                      return rects
+                    })
+                  }}
+                />
+              )
+            }
+
             if (rect.type === 'image') {
               return (
                 <Image
