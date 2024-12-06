@@ -1,6 +1,7 @@
 import type Konva from 'konva'
-import React, { useRef } from 'react'
-import { Rect } from 'react-konva'
+import { useRef } from 'react'
+import { Image as ReactKonvaImage } from 'react-konva'
+import useImage from 'use-image'
 
 import { generateShapeName } from './utils'
 
@@ -12,22 +13,26 @@ type Shape = {
   id: string
 }
 
-export type RectangleData = Shape & {
-  fill: string
-  canDrag?: boolean
+export type ImageData = Shape & {
+  src: string
   canSelect?: boolean
+  canDrag?: boolean
 }
 
-export const Rectangle = ({
-  onChange,
+type Events = {
+  onChange: (args: Shape) => void
+}
+
+export const Image = ({
+  src,
   canSelect = true,
   canDrag = true,
-  fill,
+  onChange,
   ...props
-}: RectangleData & {
-  onChange: (args: Shape) => void
-}) => {
-  const ref = useRef<Konva.Rect | null>(null)
+}: ImageData & Events) => {
+  const ref = useRef<Konva.Image | null>(null)
+
+  const [img] = useImage(src)
 
   const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
     onChange({
@@ -47,8 +52,6 @@ export const Rectangle = ({
     const scaleX = node.scaleX()
     const scaleY = node.scaleY()
 
-    node.scaleX(1)
-    node.scaleY(1)
     onChange({
       ...props,
       x: node.x(),
@@ -59,16 +62,15 @@ export const Rectangle = ({
   }
 
   return (
-    <Rect
-      ref={ref}
+    <ReactKonvaImage
+      image={img}
       {...props}
-      fill={fill}
-      name={generateShapeName('rectangle', {
+      name={generateShapeName('image', {
         canSelect,
       })}
-      draggable={canDrag}
       onDragEnd={handleDragEnd}
       onTransformEnd={handleTransformEnd}
+      draggable={canDrag}
     />
   )
 }

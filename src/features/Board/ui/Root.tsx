@@ -5,11 +5,22 @@ import { Layer, Stage } from 'react-konva'
 import { mergeRefs } from '@shared/react/lib/mergeRefs'
 
 import { useSelectController } from './contoller/useSelectController'
+import { Image, type ImageData } from './Image'
 import { Rectangle, type RectangleData } from './Rectangle'
 import { SceneProvider } from './SceneProvider'
 import { Transform } from './Transform'
 
-const initialRectangles: RectangleData[] = [
+type RectangleShape = RectangleData & {
+  type: 'rectangle'
+}
+
+type ImageShape = ImageData & {
+  type: 'image'
+}
+
+type ShapeData = RectangleShape | ImageShape
+
+const initialRectangles: ShapeData[] = [
   {
     x: 10,
     y: 10,
@@ -19,6 +30,7 @@ const initialRectangles: RectangleData[] = [
     id: 'rect1',
     canSelect: false,
     canDrag: false,
+    type: 'rectangle',
   },
   {
     x: 150,
@@ -27,6 +39,7 @@ const initialRectangles: RectangleData[] = [
     height: 100,
     fill: 'green',
     id: 'rect2',
+    type: 'rectangle',
   },
   {
     x: 300,
@@ -35,6 +48,18 @@ const initialRectangles: RectangleData[] = [
     height: 100,
     fill: 'green',
     id: 'rect3',
+    type: 'rectangle',
+  },
+  {
+    type: 'image',
+    x: 400,
+    y: 400,
+    canDrag: true,
+    canSelect: false,
+    id: 'image-1',
+    width: 300,
+    height: 300,
+    src: 'https://p.turbosquid.com/ts-thumb/sC/TOOTGK/10EZr9Lr/10/jpg/1445892121/600x600/fit_q87/e696373449ba51fba8734edcda4dca4f780585b4/10.jpg',
   },
 ]
 
@@ -63,6 +88,26 @@ export const Root = () => {
       >
         <Layer>
           {rectangles.map((rect, i) => {
+            if (rect.type === 'image') {
+              return (
+                <Image
+                  key={rect.id}
+                  {...rect}
+                  onChange={(newAttrs) => {
+                    setRectangles((prevState) => {
+                      const rects = prevState.slice()
+                      rects[i] = {
+                        ...rects[i],
+                        ...newAttrs,
+                      }
+
+                      return rects
+                    })
+                  }}
+                />
+              )
+            }
+
             return (
               <Rectangle
                 key={rect.id}
