@@ -20,4 +20,8 @@ export default defineConfig({
   resolve: {
     alias: aliases,
   },
+
+  define: {
+    'process.env': {},
+  },
 })
