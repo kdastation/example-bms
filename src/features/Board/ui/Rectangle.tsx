@@ -1,68 +1,69 @@
 import type Konva from 'konva'
-import React, { Fragment, useEffect, useRef, type RefObject } from 'react'
-import { Rect, Transformer } from 'react-konva'
+import React, { useRef } from 'react'
+import { Rect } from 'react-konva'
 
-export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
-  const shapeRef: RefObject<Konva.Rect> = useRef(null)
-  const trRef: RefObject<Konva.Transformer> = useRef(null)
+import { generateShapeName } from './utils'
 
-  useEffect(() => {
-    if (isSelected) {
-      if (trRef.current && shapeRef.current) {
-        trRef.current?.nodes([shapeRef.current])
-        trRef.current?.getLayer()?.batchDraw()
-      }
+export type RectangleData = {
+  x: number
+  y: number
+  width: number
+  height: number
+  id: string
+  fill: string
+  canDrag?: boolean
+  canSelect?: boolean
+}
+
+export const Rectangle = ({
+  onChange,
+  canSelect = true,
+  canDrag = true,
+  ...props
+}: RectangleData & {
+  onChange: (args: RectangleData) => void
+}) => {
+  const ref = useRef<Konva.Rect | null>(null)
+
+  const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
+    onChange({
+      ...props,
+      x: e.target.x(),
+      y: e.target.y(),
+    })
+  }
+
+  const handleTransformEnd = () => {
+    const node = ref.current
+
+    if (!node) {
+      return
     }
-  }, [isSelected])
+
+    const scaleX = node.scaleX()
+    const scaleY = node.scaleY()
+
+    node.scaleX(1)
+    node.scaleY(1)
+    onChange({
+      ...props,
+      x: node.x(),
+      y: node.y(),
+      width: Math.max(5, node.width() * scaleX),
+      height: Math.max(node.height() * scaleY),
+    })
+  }
 
   return (
-    <Fragment>
-      <Rect
-        onClick={onSelect}
-        onTap={onSelect}
-        ref={shapeRef}
-        {...shapeProps}
-        draggable
-        onDragEnd={(e) => {
-          onChange({
-            ...shapeProps,
-            x: e.target.x(),
-            y: e.target.y(),
-          })
-        }}
-        onTransformEnd={() => {
-          const node = shapeRef.current
-
-          if (!node) {
-            return
-          }
-
-          const scaleX = node.scaleX()
-          const scaleY = node.scaleY()
-
-          node.scaleX(1)
-          node.scaleY(1)
-          onChange({
-            ...shapeProps,
-            x: node.x(),
-            y: node.y(),
-            width: Math.max(5, node.width() * scaleX),
-            height: Math.max(node.height() * scaleY),
-          })
-        }}
-      />
-      {isSelected && (
-        <Transformer
-          ref={trRef}
-          flipEnabled={false}
-          boundBoxFunc={(oldBox, newBox) => {
-            if (Math.abs(newBox.width) < 5 || Math.abs(newBox.height) < 5) {
-              return oldBox
-            }
-            return newBox
-          }}
-        />
-      )}
-    </Fragment>
+    <Rect
+      ref={ref}
+      {...props}
+      name={generateShapeName('rectangle', {
+        canSelect,
+      })}
+      draggable={canDrag}
+      onDragEnd={handleDragEnd}
+      onTransformEnd={handleTransformEnd}
+    />
   )
 }
