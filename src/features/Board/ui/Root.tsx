@@ -137,13 +137,7 @@ const Transform = ({ ids }: { ids: string[] }) => {
 
 const getShapesCanBeSelect = (stage: Konva.Stage) => {
   return stage.find((node) => {
-    const attrs = node.attrs
-
-    if (!attrs || !attrs.name) {
-      return false
-    }
-
-    return attrs.name.includes('selectable')
+    return node.hasName('selectable')
   })
 }
 
@@ -283,6 +277,11 @@ const useSelectController = ({
     const isSelected = selected.length > 0
 
     if (!isSelected) {
+      onSelect([e.target.id()])
+      return
+    }
+
+    if (!metaPressed && isSelected) {
       onSelect([e.target.id()])
       return
     }
