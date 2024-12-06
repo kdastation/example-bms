@@ -55,7 +55,7 @@ const initialRectangles: ShapeData[] = [
     x: 400,
     y: 400,
     canDrag: true,
-    canSelect: false,
+    canSelect: true,
     id: 'image-1',
     width: 300,
     height: 300,

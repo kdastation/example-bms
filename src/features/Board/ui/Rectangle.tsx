@@ -1,16 +1,9 @@
 import type Konva from 'konva'
-import React, { useRef } from 'react'
+import React from 'react'
 import { Rect } from 'react-konva'
 
-import { generateShapeName } from './utils'
-
-type Shape = {
-  x: number
-  y: number
-  width: number
-  height: number
-  id: string
-}
+import { type Shape } from './types'
+import { generateShapeName, useDragShape, useTransformShape } from './utils'
 
 export type RectangleData = Shape & {
   fill: string
@@ -27,48 +20,35 @@ export const Rectangle = ({
 }: RectangleData & {
   onChange: (args: Shape) => void
 }) => {
-  const ref = useRef<Konva.Rect | null>(null)
+  const { ref: refShapeForTransform, onTransformEnd } = useTransformShape<Konva.Rect>({
+    onChange: (sizes) => {
+      onChange?.({
+        ...props,
+        ...sizes,
+      })
+    },
+  })
 
-  const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
-    onChange({
-      ...props,
-      x: e.target.x(),
-      y: e.target.y(),
-    })
-  }
-
-  const handleTransformEnd = () => {
-    const node = ref.current
-
-    if (!node) {
-      return
-    }
-
-    const scaleX = node.scaleX()
-    const scaleY = node.scaleY()
-
-    node.scaleX(1)
-    node.scaleY(1)
-    onChange({
-      ...props,
-      x: node.x(),
-      y: node.y(),
-      width: Math.max(5, node.width() * scaleX),
-      height: Math.max(node.height() * scaleY),
-    })
-  }
+  const { onDragEnd } = useDragShape({
+    onChange: (coords) => {
+      onChange?.({
+        ...props,
+        ...coords,
+      })
+    },
+  })
 
   return (
     <Rect
-      ref={ref}
+      ref={refShapeForTransform}
       {...props}
       fill={fill}
       name={generateShapeName('rectangle', {
         canSelect,
       })}
       draggable={canDrag}
-      onDragEnd={handleDragEnd}
-      onTransformEnd={handleTransformEnd}
+      onDragEnd={onDragEnd}
+      onTransformEnd={onTransformEnd}
     />
   )
 }
