@@ -1,56 +1,84 @@
 import Konva from 'konva'
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type MouseEvent,
-  type ReactNode,
-  type RefObject,
-} from 'react'
+import React, { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { Layer, Rect, Stage, Transformer } from 'react-konva'
 
+import { isTruthy } from '@shared/is'
 import { createContext } from '@shared/react/lib/createContext'
 import { mergeRefs } from '@shared/react/lib/mergeRefs'
 
-const Rectangle = ({ shapeProps, onChange }) => {
-  const shapeRef = React.useRef()
+type RectangleData = {
+  x: number
+  y: number
+  width: number
+  height: number
+  id: string
+  fill: string
+  canDrag?: boolean
+  canSelect?: boolean
+}
+
+const generateShapeName = (
+  name: string,
+  {
+    canSelect,
+  }: {
+    canSelect?: boolean
+  }
+) => {
+  const names = [name, canSelect && 'selectable'].filter(isTruthy)
+
+  return names.join(' ')
+}
+
+const Rectangle = ({
+  onChange,
+  canSelect = true,
+  canDrag = true,
+  ...props
+}: RectangleData & {
+  onChange: (args: RectangleData) => void
+}) => {
+  const ref = useRef<Konva.Rect | null>(null)
+
+  const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
+    onChange({
+      ...props,
+      x: e.target.x(),
+      y: e.target.y(),
+    })
+  }
+
+  const handleTransformEnd = () => {
+    const node = ref.current
+
+    if (!node) {
+      return
+    }
+
+    const scaleX = node.scaleX()
+    const scaleY = node.scaleY()
+
+    node.scaleX(1)
+    node.scaleY(1)
+    onChange({
+      ...props,
+      x: node.x(),
+      y: node.y(),
+      width: Math.max(5, node.width() * scaleX),
+      height: Math.max(node.height() * scaleY),
+    })
+  }
 
   return (
     <Rect
-      ref={shapeRef}
-      {...shapeProps}
-      name='rectangle selectable'
-      draggable
-      onDragEnd={(e) => {
-        console.log(e.target.id(), e.target.x(), e.target.y())
-        onChange({
-          ...shapeProps,
-          x: e.target.x(),
-          y: e.target.y(),
-        })
-      }}
-      onTransformEnd={(e) => {
-        // transformer is changing scale of the node
-        // and NOT its width or height
-        // but in the store we have only width and height
-        // to match the data better we will reset scale on transform end
-        const node = shapeRef.current
-        const scaleX = node.scaleX()
-        const scaleY = node.scaleY()
-
-        // we will reset it back
-        node.scaleX(1)
-        node.scaleY(1)
-        onChange({
-          ...shapeProps,
-          x: node.x(),
-          y: node.y(),
-          // set minimal value
-          width: Math.max(5, node.width() * scaleX),
-          height: Math.max(node.height() * scaleY),
-        })
-      }}
+      ref={ref}
+      {...props}
+      name={generateShapeName('rectangle', {
+        canSelect,
+      })}
+      draggable={canDrag}
+      onDragEnd={handleDragEnd}
+      onTransformEnd={handleTransformEnd}
     />
   )
 }
@@ -329,9 +357,13 @@ export const Root = () => {
           {rectangles.map((rect, i) => {
             return (
               <Rectangle
-                key={i}
-                getKey={i}
-                shapeProps={rect}
+                key={rect.id}
+                width={rect.width}
+                fill={rect.fill}
+                y={rect.y}
+                x={rect.x}
+                height={rect.height}
+                id={rect.id}
                 onChange={(newAttrs) => {
                   setRectangles((prevState) => {
                     const rects = prevState.slice()
