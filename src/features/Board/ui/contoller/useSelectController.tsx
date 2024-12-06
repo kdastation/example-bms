@@ -7,9 +7,11 @@ import { getShapesCanBeSelect } from '../utils'
 export const useSelectController = ({
   onSelect,
   selected,
+  enabled = true,
 }: {
   onSelect: (shapes: string[]) => void
   selected: string[]
+  enabled?: boolean
 }) => {
   const rectRef = useRef<Konva.Rect | null>(null)
   const stageRef = useRef<Konva.Stage | null>(null)
@@ -41,6 +43,10 @@ export const useSelectController = ({
   }
 
   const onTouchStart = (e) => {
+    if (!enabled) {
+      return
+    }
+
     const clickedOnEmpty = e.target === e.target.getStage()
 
     if (clickedOnEmpty) {
@@ -49,6 +55,10 @@ export const useSelectController = ({
   }
 
   const onMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    if (!enabled) {
+      return
+    }
+
     const isElement = e.target.findAncestor('.elements-container')
 
     const isTransformer = e.target.findAncestor('Transformer')
@@ -75,6 +85,10 @@ export const useSelectController = ({
   }
 
   const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    if (!enabled) {
+      return
+    }
+
     if (!selection.current.visible) {
       return
     }
@@ -94,6 +108,10 @@ export const useSelectController = ({
   }
 
   const onMouseUp = () => {
+    if (!enabled) {
+      return
+    }
+
     selection.current.visible = false
 
     const stage = stageRef.current
@@ -127,6 +145,10 @@ export const useSelectController = ({
   }
 
   const onClick = (e) => {
+    if (!enabled) {
+      return
+    }
+
     const { x1, x2, y1, y2 } = selection.current
 
     const moved = x1 !== x2 || y1 !== y2

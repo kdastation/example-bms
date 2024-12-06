@@ -104,6 +104,8 @@ const Board = () => {
   const [rectangles, setRectangles] = useState(initialRectangles)
   const [selectedIds, selectShapes] = useState([])
 
+  const [isStartEditText, setIsStartEditText] = useState(false)
+
   const {
     elements,
     stageRef: stageRefSelectController,
@@ -111,6 +113,7 @@ const Board = () => {
   } = useSelectController({
     onSelect: selectShapes,
     selected: selectedIds,
+    enabled: !isStartEditText,
   })
 
   const { onWheel } = useZoomController({
@@ -147,6 +150,30 @@ const Board = () => {
 
                       return rects
                     })
+                  }}
+                  onEndChangeText={(newText) => {
+                    setRectangles((prevState) => {
+                      const rects = prevState.slice()
+
+                      if (rects[i].type === 'text') {
+                        rects[i] = {
+                          ...rects[i],
+                          text: newText,
+                        }
+                      }
+
+                      return rects
+                    })
+
+                    selectShapes([rect.id])
+
+                    setTimeout(() => {
+                      setIsStartEditText(false)
+                    }, 100)
+                  }}
+                  onStartChangeText={() => {
+                    setIsStartEditText(true)
+                    selectShapes([])
                   }}
                 />
               )
