@@ -83,7 +83,7 @@ const Rectangle = ({
   )
 }
 
-const initialRectangles = [
+const initialRectangles: RectangleData[] = [
   {
     x: 10,
     y: 10,
@@ -91,6 +91,8 @@ const initialRectangles = [
     height: 100,
     fill: 'blue',
     id: 'rect1',
+    canSelect: false,
+    canDrag: false,
   },
   {
     x: 150,
@@ -362,12 +364,17 @@ export const Root = () => {
                 fill={rect.fill}
                 y={rect.y}
                 x={rect.x}
+                canSelect={rect.canSelect}
+                canDrag={rect.canDrag}
                 height={rect.height}
                 id={rect.id}
                 onChange={(newAttrs) => {
                   setRectangles((prevState) => {
                     const rects = prevState.slice()
-                    rects[i] = newAttrs
+                    rects[i] = {
+                      ...rects[i],
+                      ...newAttrs,
+                    }
 
                     return rects
                   })
