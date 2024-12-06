@@ -1,5 +1,5 @@
 import Konva from 'konva'
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, type MouseEvent } from 'react'
 import { Rect } from 'react-konva'
 
 import { getShapesCanBeSelect } from '../utils'
@@ -48,7 +48,7 @@ export const useSelectController = ({
     }
   }
 
-  const onMouseDown = (e) => {
+  const onMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const isElement = e.target.findAncestor('.elements-container')
 
     const isTransformer = e.target.findAncestor('Transformer')
@@ -57,7 +57,13 @@ export const useSelectController = ({
       return
     }
 
-    const pos = e.target.getStage().getPointerPosition()
+    const stage = e.target.getStage() as Konva.Stage
+
+    const pos = stage.getRelativePointerPosition()
+
+    if (!pos) {
+      return
+    }
 
     selection.current.visible = true
     selection.current.x1 = pos.x
@@ -68,12 +74,18 @@ export const useSelectController = ({
     updateSelectionRect()
   }
 
-  const onMouseMove = (e) => {
+  const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
     if (!selection.current.visible) {
       return
     }
 
-    const pos = e.target.getStage().getPointerPosition()
+    const stage = e.target.getStage() as Konva.Stage
+
+    const pos = stage.getRelativePointerPosition()
+
+    if (!pos) {
+      return
+    }
 
     selection.current.x2 = pos.x
     selection.current.y2 = pos.y

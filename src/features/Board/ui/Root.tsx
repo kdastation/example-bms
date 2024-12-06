@@ -6,9 +6,11 @@ import { mergeRefs } from '@shared/react/lib/mergeRefs'
 
 import { Circle, type CircleData } from './Circle'
 import { useSelectController } from './contoller/useSelectController'
+import { useZoomController } from './contoller/useZoomController'
 import { Image, type ImageData } from './Image'
 import { Rectangle, type RectangleData } from './Rectangle'
 import { SceneProvider } from './SceneProvider'
+import { StageProvider, useStage } from './StageProvider'
 import { Transform } from './Transform'
 
 type RectangleShape = RectangleData & {
@@ -77,8 +79,12 @@ const initialRectangles: ShapeData[] = [
   },
 ]
 
-export const Root = () => {
+const Board = () => {
   const stageRef = useRef<Konva.Stage | null>(null)
+
+  const stageStore = useStage()
+
+  const { setStage, ...stage } = stageStore((state) => state)
 
   const [rectangles, setRectangles] = useState(initialRectangles)
   const [selectedIds, selectShapes] = useState([])
@@ -92,13 +98,22 @@ export const Root = () => {
     selected: selectedIds,
   })
 
+  const { onWheel } = useZoomController({
+    onZoom: setStage,
+  })
+
   return (
     <SceneProvider stageRef={stageRef}>
       <Stage
         ref={mergeRefs([stageRef, stageRefSelectController])}
         width={window.innerWidth}
         height={window.innerHeight}
+        scaleX={stage.scale}
+        scaleY={stage.scale}
+        x={stage.x}
+        y={stage.y}
         {...handlers}
+        onWheel={onWheel}
       >
         <Layer>
           {rectangles.map((rect, i) => {
@@ -176,5 +191,13 @@ export const Root = () => {
         </Layer>
       </Stage>
     </SceneProvider>
+  )
+}
+
+export const Root = () => {
+  return (
+    <StageProvider>
+      <Board />
+    </StageProvider>
   )
 }
