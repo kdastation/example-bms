@@ -11,6 +11,7 @@ import { Image, type ImageData } from './Image'
 import { Rectangle, type RectangleData } from './Rectangle'
 import { SceneProvider } from './SceneProvider'
 import { StageProvider, useStage } from './StageProvider'
+import { Text, type TextData } from './Text'
 import { Transform } from './Transform'
 
 type RectangleShape = RectangleData & {
@@ -25,7 +26,11 @@ type CircleShape = CircleData & {
   type: 'circle'
 }
 
-type ShapeData = RectangleShape | ImageShape | CircleShape
+type TextShape = TextData & {
+  type: 'text'
+}
+
+type ShapeData = RectangleShape | ImageShape | CircleShape | TextShape
 
 const initialRectangles: ShapeData[] = [
   {
@@ -77,6 +82,16 @@ const initialRectangles: ShapeData[] = [
     id: 'circle1',
     type: 'circle',
   },
+  {
+    x: 350,
+    y: 405,
+    type: 'text',
+    width: 400,
+    height: 30,
+    text: 'asdsadad',
+    color: 'red',
+    id: 'text-1',
+  },
 ]
 
 const Board = () => {
@@ -117,6 +132,26 @@ const Board = () => {
       >
         <Layer>
           {rectangles.map((rect, i) => {
+            if (rect.type === 'text') {
+              return (
+                <Text
+                  key={rect.id}
+                  {...rect}
+                  onChange={(newAttrs) => {
+                    setRectangles((prevState) => {
+                      const rects = prevState.slice()
+                      rects[i] = {
+                        ...rects[i],
+                        ...newAttrs,
+                      }
+
+                      return rects
+                    })
+                  }}
+                />
+              )
+            }
+
             if (rect.type === 'circle') {
               return (
                 <Circle
