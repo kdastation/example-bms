@@ -72,6 +72,14 @@ const initialRectangles = [
     fill: 'green',
     id: 'rect2',
   },
+  {
+    x: 300,
+    y: 300,
+    width: 100,
+    height: 100,
+    fill: 'green',
+    id: 'rect3',
+  },
 ]
 
 export type Scene = {
@@ -218,11 +226,11 @@ const useSelectController = ({
       updateSelectionRect()
       return
     }
-
-    if (selected.length > 1) {
-      updateSelectionRect()
-      return
-    }
+    //
+    // if (selected.length > 1) {
+    //   updateSelectionRect()
+    //   return
+    // }
 
     const selBox = rectRef.current?.getClientRect()
 
@@ -260,7 +268,6 @@ const useSelectController = ({
       return
     }
 
-    // do nothing if clicked NOT on our rectangles
     if (!e.target.hasName('rectangle')) {
       return
     }
@@ -270,11 +277,12 @@ const useSelectController = ({
 
     const isSelected = selected.length > 0
 
-    if (!metaPressed && !isSelected) {
+    if (!isSelected) {
       onSelect([e.target.id()])
-    } else if (metaPressed && isSelected) {
-      onSelect?.(selected.filter((oldId) => oldId !== e.target.id()))
-    } else if (metaPressed && !isSelected) {
+      return
+    }
+
+    if (metaPressed && isSelected) {
       onSelect?.([...selected, e.target.id()])
     }
   }
