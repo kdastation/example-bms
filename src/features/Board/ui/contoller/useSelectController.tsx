@@ -3,7 +3,7 @@ import React, { useRef, useState, type MouseEvent } from 'react'
 import { Rect } from 'react-konva'
 
 import { type Controller } from '../types'
-import { getShapesCanBeSelect } from '../utils'
+import { distanceTwoPoints, getShapesCanBeSelect } from '../utils'
 
 export type SelectControllerArgs = {
   onSelect: (shapes: string[]) => void
@@ -102,6 +102,17 @@ export const useSelectController = ({
     const pos = stage.getRelativePointerPosition()
 
     if (!pos) {
+      return
+    }
+
+    if (
+      distanceTwoPoints({
+        x1: selection.current.x1,
+        y2: selection.current.y1,
+        x2: pos.x,
+        y1: pos.y,
+      }) < 150
+    ) {
       return
     }
 
