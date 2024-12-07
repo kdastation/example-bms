@@ -2,8 +2,8 @@ import type Konva from 'konva'
 import React from 'react'
 import { Rect } from 'react-konva'
 
-import { type ShapeAttrs } from './Shape'
-import { generateShapeName, useDragShape, useTransformShape } from './utils'
+import { type ShapeAttrs } from '../Shape'
+import { generateShapeName, useDragShape, useTransformShape } from '../utils'
 
 type Events = {
   onChange: (args: ShapeAttrs) => void

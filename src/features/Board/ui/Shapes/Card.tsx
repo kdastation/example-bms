@@ -4,8 +4,8 @@ import { Circle, Group, Rect } from 'react-konva'
 
 import { callAllHandlers } from '@shared/react/lib/callAllHandlers'
 
-import { type CardData, type ShapeAttrs } from './Shape'
-import { generateShapeName, useDragShape, useTransformShape } from './utils'
+import { type CardData, type ShapeAttrs } from '../Shape'
+import { generateShapeName, useDragShape, useTransformShape } from '../utils'
 
 type Events = {
   onAddCard?: ({

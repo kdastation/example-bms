@@ -2,8 +2,8 @@ import type Konva from 'konva'
 import React from 'react'
 import { Circle as KonvaCircle } from 'react-konva'
 
-import { type CircleData, type ShapeAttrs } from './Shape'
-import { generateShapeName, useDragShape, useTransformShape } from './utils'
+import { type CircleData, type ShapeAttrs } from '../Shape'
+import { generateShapeName, useDragShape, useTransformShape } from '../utils'
 
 type Events = {
   onChange: (args: ShapeAttrs) => void
