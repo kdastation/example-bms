@@ -46,6 +46,7 @@ export const Rectangle = ({
       name={generateShapeName('rectangle', {
         canSelect,
       })}
+      cornerRadius={8}
       draggable={canDrag}
       onDragEnd={onDragEnd}
       onTransformEnd={onTransformEnd}

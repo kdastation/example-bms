@@ -4,6 +4,7 @@ import { Layer, Stage } from 'react-konva'
 
 import { mergeRefs } from '@shared/react/lib/mergeRefs'
 
+import { Card, type CardData } from './Card'
 import { Circle, type CircleData } from './Circle'
 import { useController, type StateController } from './contoller/useController'
 import { useZoomController } from './contoller/useZoomController'
@@ -36,7 +37,11 @@ type LineShape = LineData & {
   type: 'line'
 }
 
-type ShapeData = RectangleShape | ImageShape | CircleShape | TextShape | LineShape
+type CardShape = CardData & {
+  type: 'card'
+}
+
+type ShapeData = RectangleShape | ImageShape | CircleShape | TextShape | LineShape | CardShape
 
 const initialRectangles: ShapeData[] = [
   {
@@ -83,6 +88,21 @@ const initialRectangles: ShapeData[] = [
     },
     rotation: 0,
   },
+  {
+    type: 'card',
+    rotation: 0,
+    scale: {
+      x: 1,
+      y: 1,
+    },
+    height: 400,
+    width: 400,
+    fill: 'rgb(255, 249, 177)',
+    id: 'card-1',
+    x: 300,
+    y: 300,
+    canCreateNewCard: true,
+  },
 ]
 
 const Board = () => {
@@ -92,7 +112,7 @@ const Board = () => {
 
   const { setStage, ...stage } = stageStore((state) => state)
 
-  const [rectangles, setRectangles] = useState(
+  const [rectangles, setRectangles] = useState<ShapeData[]>(
     JSON.parse(localStorage.getItem('shapes')) || initialRectangles
   )
 
@@ -221,6 +241,60 @@ const Board = () => {
         >
           <Layer>
             {rectangles.map((rect, i) => {
+              if (rect.type === 'card') {
+                console.log(
+                  rect.canCreateNewCard
+                    ? selectedIds.length === 1 && selectedIds.includes(rect.id)
+                    : false
+                )
+
+                return (
+                  <Card
+                    key={rect.id}
+                    {...rect}
+                    canCreateNewCard={
+                      rect.canCreateNewCard
+                        ? selectedIds.length === 1 && selectedIds.includes(rect.id)
+                        : false
+                    }
+                    onChange={(newAttrs) => {
+                      setRectangles((prevState) => {
+                        const rects = prevState.slice()
+                        rects[i] = {
+                          ...rects[i],
+                          ...newAttrs,
+                        }
+
+                        return rects
+                      })
+                    }}
+                    onAddCard={(newCardAttrs) => {
+                      const newCardId = `card-${rectangles.length}`
+
+                      setRectangles((prev) => {
+                        return [
+                          ...prev,
+                          {
+                            type: 'card',
+                            rotation: 0,
+                            id: newCardId,
+                            fill: 'red',
+                            canCreateNewCard: true,
+                            scale: {
+                              x: 1,
+                              y: 1,
+                            },
+                            ...newCardAttrs,
+                          },
+                        ]
+                      })
+
+                      selectShapes([newCardId])
+                    }}
+                  />
+                )
+              }
+
               if (rect.type === 'line') {
                 return (
                   <Line

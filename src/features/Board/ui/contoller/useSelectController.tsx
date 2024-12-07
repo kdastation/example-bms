@@ -168,8 +168,18 @@ export const useSelectController = ({
       return
     }
 
-    //TODO: рефакторинг
-    if (!e.target.hasName('selectable')) {
+    //TODO: refactor
+    const canSelectTarget = e.target.hasName('selectable')
+
+    const canSelectParent = e.target.parent?.hasName('selectable')
+
+    if (!canSelectParent && !canSelectTarget) {
+      return
+    }
+
+    const idShape = canSelectParent ? e.target.parent?.id?.() : e.target.id?.()
+
+    if (!idShape) {
       return
     }
 
@@ -178,17 +188,17 @@ export const useSelectController = ({
     const isSelected = selected.length > 0
 
     if (!isSelected) {
-      onSelect([e.target.id()])
+      onSelect([idShape])
       return
     }
 
     if (!metaPressed && isSelected) {
-      onSelect([e.target.id()])
+      onSelect([idShape])
       return
     }
 
     if (metaPressed && isSelected) {
-      onSelect?.([...selected, e.target.id()])
+      onSelect?.([...selected, idShape])
     }
   }
 
