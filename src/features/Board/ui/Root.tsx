@@ -8,11 +8,13 @@ import { Circle, type CircleData } from './Circle'
 import { useController, type StateController } from './contoller/useController'
 import { useZoomController } from './contoller/useZoomController'
 import { Image, type ImageData } from './Image'
+import { Line, type LineData } from './Line'
 import { Rectangle, type RectangleData } from './Rectangle'
 import { SceneProvider } from './SceneProvider'
 import { StageProvider, useStage } from './StageProvider'
 import { Text, type TextData } from './Text'
 import { Transform } from './Transform'
+import { distanceTwoPoints } from './utils'
 
 type RectangleShape = RectangleData & {
   type: 'rectangle'
@@ -30,7 +32,11 @@ type TextShape = TextData & {
   type: 'text'
 }
 
-type ShapeData = RectangleShape | ImageShape | CircleShape | TextShape
+type LineShape = LineData & {
+  type: 'line'
+}
+
+type ShapeData = RectangleShape | ImageShape | CircleShape | TextShape | LineShape
 
 const initialRectangles: ShapeData[] = [
   {
@@ -97,6 +103,18 @@ const initialRectangles: ShapeData[] = [
     color: 'red',
     id: 'text-1',
     rotation: 0,
+  },
+  {
+    x: 20,
+    y: 20,
+    points: [100, 200, 300, 400],
+    fill: 'red',
+    stroke: 'red',
+    type: 'line',
+    rotation: 0,
+    width: distanceTwoPoints({ x1: 100, y1: 200, x2: 300, y2: 400 }),
+    height: distanceTwoPoints({ x1: 100, y1: 200, x2: 300, y2: 400 }),
+    id: 'line-1',
   },
 ]
 
@@ -201,6 +219,26 @@ const Board = () => {
         >
           <Layer>
             {rectangles.map((rect, i) => {
+              if (rect.type === 'line') {
+                return (
+                  <Line
+                    key={rect.id}
+                    {...rect}
+                    onChange={(newAttrs) => {
+                      setRectangles((prevState) => {
+                        const rects = prevState.slice()
+                        rects[i] = {
+                          ...rects[i],
+                          ...newAttrs,
+                        }
+
+                        return rects
+                      })
+                    }}
+                  />
+                )
+              }
+
               if (rect.type === 'text') {
                 return (
                   <Text

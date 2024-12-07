@@ -24,6 +24,7 @@ export const getShapesCanBeSelect = (stage: Konva.Stage) => {
 
 export const useTransformShape = <T extends Konva.Shape>({
   onChange,
+  formatScale = true,
 }: {
   onChange: (args: {
     x: number
@@ -32,6 +33,7 @@ export const useTransformShape = <T extends Konva.Shape>({
     height: number
     rotation: number
   }) => void
+  formatScale?: boolean
 }) => {
   const ref = useRef<T | null>(null)
 
@@ -45,8 +47,10 @@ export const useTransformShape = <T extends Konva.Shape>({
     const scaleX = node.scaleX()
     const scaleY = node.scaleY()
 
-    node.scaleX(1)
-    node.scaleY(1)
+    if (formatScale) {
+      node.scaleX(1)
+      node.scaleY(1)
+    }
 
     onChange({
       x: node.x(),
@@ -76,4 +80,18 @@ export const useDragShape = ({
       })
     },
   }
+}
+
+export const distanceTwoPoints = ({
+  x1,
+  y1,
+  x2,
+  y2,
+}: {
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+}) => {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
 }
