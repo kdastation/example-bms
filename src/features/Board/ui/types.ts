@@ -1,5 +1,5 @@
 import type Konva from 'konva'
-import { type MutableRefObject, type ReactNode, type RefObject } from 'react'
+import { type MutableRefObject, type ReactNode } from 'react'
 import { type StageProps } from 'react-konva'
 
 export type Shape = {
@@ -9,6 +9,10 @@ export type Shape = {
   height: number
   id: string
   rotation: number
+  scale: {
+    x: number
+    y: number
+  }
 }
 
 export type Controller = {

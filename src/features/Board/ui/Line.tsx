@@ -5,9 +5,9 @@ import { type Shape } from './types'
 import { generateShapeName, useDragShape, useTransformShape } from './utils'
 
 export type LineData = Shape & {
-  points: number[]
   fill: string
   stroke: string
+  points: number[]
   canDrag?: boolean
   canSelect?: boolean
 }

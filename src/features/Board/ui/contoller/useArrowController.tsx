@@ -6,20 +6,25 @@ import { isNull } from '@shared/is'
 
 import { type Controller } from '../types'
 
-export type ArrowControllerArgs = {
-  onAdd?: () => void
+type RequireKeys<T extends object, K extends keyof T> = Required<Pick<T, K>> & Omit<T, K>
+
+type Points = {
+  start: {
+    x: number
+    y: number
+  }
+  end?: {
+    x: number
+    y: number
+  }
 }
+
+export type ArrowControllerArgs = {
+  onAdd?: (points: RequireKeys<Points, 'end' | 'start'>) => void
+}
+
 export const useArrowController = ({ onAdd }: ArrowControllerArgs): Controller => {
-  const [points, setPoints] = useState<{
-    start: {
-      x: number
-      y: number
-    }
-    end?: {
-      x: number
-      y: number
-    }
-  } | null>(null)
+  const [points, setPoints] = useState<Points | null>(null)
 
   return {
     stageProps: {
@@ -71,7 +76,12 @@ export const useArrowController = ({ onAdd }: ArrowControllerArgs): Controller =
         })
       },
       onMouseUp() {
-        onAdd?.()
+        if (!isNull(points) && points.start && points.end) {
+          onAdd?.({
+            start: points.start,
+            end: points.end,
+          })
+        }
 
         setPoints(null)
       },

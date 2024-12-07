@@ -3,6 +3,8 @@ import { useRef } from 'react'
 
 import { isTruthy } from '@shared/is'
 
+import Vector2d = Konva.Vector2d
+
 export const generateShapeName = (
   name: string,
   {
@@ -32,6 +34,10 @@ export const useTransformShape = <T extends Konva.Shape>({
     width: number
     height: number
     rotation: number
+    scale: {
+      x: number
+      y: number
+    }
   }) => void
   formatScale?: boolean
 }) => {
@@ -58,6 +64,7 @@ export const useTransformShape = <T extends Konva.Shape>({
       width: Math.max(5, node.width() * scaleX),
       height: Math.max(node.height() * scaleY),
       rotation: node.rotation(),
+      scale: node.scale() as Vector2d,
     })
   }
 
@@ -92,6 +99,6 @@ export const distanceTwoPoints = ({
   y1: number
   x2: number
   y2: number
-}) => {
+}): number => {
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
 }

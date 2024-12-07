@@ -40,81 +40,48 @@ type ShapeData = RectangleShape | ImageShape | CircleShape | TextShape | LineSha
 
 const initialRectangles: ShapeData[] = [
   {
-    x: 10,
-    y: 10,
-    width: 100,
-    height: 100,
-    fill: 'blue',
-    id: 'rect1',
-    canSelect: false,
-    canDrag: false,
     type: 'rectangle',
-    rotation: 0,
-  },
-  {
-    x: 150,
-    y: 150,
-    width: 100,
-    height: 100,
-    fill: 'green',
-    id: 'rect2',
-    type: 'rectangle',
-    rotation: 0,
-  },
-  {
-    x: 300,
-    y: 300,
-    width: 100,
-    height: 100,
-    fill: 'green',
-    id: 'rect3',
-    type: 'rectangle',
-    rotation: 0,
-  },
-  {
-    type: 'image',
-    x: 400,
-    y: 400,
-    canDrag: true,
-    canSelect: true,
-    id: 'image-1',
-    width: 300,
-    height: 300,
-    src: 'https://p.turbosquid.com/ts-thumb/sC/TOOTGK/10EZr9Lr/10/jpg/1445892121/600x600/fit_q87/e696373449ba51fba8734edcda4dca4f780585b4/10.jpg',
-    rotation: 0,
-  },
-  {
-    x: 300,
-    y: 600,
-    width: 100,
-    height: 100,
-    fill: 'green',
-    id: 'circle1',
-    type: 'circle',
-    rotation: 0,
-  },
-  {
-    x: 350,
-    y: 405,
-    type: 'text',
-    width: 400,
-    height: 30,
-    text: 'asdsadad',
-    color: 'red',
-    id: 'text-1',
-    rotation: 0,
-  },
-  {
-    x: 20,
-    y: 20,
-    points: [100, 200, 300, 400],
+    y: 0,
+    x: 0,
+    height: 120,
+    width: 160,
     fill: 'red',
-    stroke: 'red',
-    type: 'line',
+    scale: {
+      x: 1,
+      y: 1,
+    },
+    id: 'rect-1',
     rotation: 0,
-    width: distanceTwoPoints({ x1: 100, y1: 200, x2: 300, y2: 400 }),
-    height: distanceTwoPoints({ x1: 100, y1: 200, x2: 300, y2: 400 }),
+  },
+  {
+    type: 'circle',
+    x: 100,
+    y: 100,
+    rotation: 0,
+    scale: {
+      x: 1,
+      y: 1,
+    },
+    fill: 'green',
+    width: 40,
+    height: 40,
+    id: 'circle-1',
+  },
+  {
+    type: 'line',
+    x: 0,
+    y: 0,
     id: 'line-1',
+    stroke: 'red',
+    fill: 'red',
+    points: [150, 150, 300, 300],
+    width: distanceTwoPoints({ x1: 150, y1: 150, x2: 150, y2: 150 }),
+    height: distanceTwoPoints({ x1: 150, y1: 150, x2: 150, y2: 150 }),
+    scale: {
+      x: 1,
+      y: 1,
+    },
+    rotation: 0,
   },
 ]
 
@@ -125,7 +92,9 @@ const Board = () => {
 
   const { setStage, ...stage } = stageStore((state) => state)
 
-  const [rectangles, setRectangles] = useState(initialRectangles)
+  const [rectangles, setRectangles] = useState(
+    JSON.parse(localStorage.getItem('shapes')) || initialRectangles
+  )
 
   const [selectedIds, selectShapes] = useState([])
 
@@ -160,8 +129,34 @@ const Board = () => {
       },
     },
     arrow: {
-      onAdd: () => {
-        console.log('add')
+      onAdd: (points) => {
+        setRectangles((prev) => {
+          return [
+            ...prev,
+            {
+              id: `line-${prev.length + 10}`,
+              rotation: 0,
+              type: 'line',
+              fill: 'red',
+              stroke: 'red',
+              x: 0,
+              y: 0,
+              points: [points.start.x, points.start.y, points.end.x, points.end.y],
+              width: distanceTwoPoints({
+                x1: points.start.x,
+                y1: points.start.y,
+                x2: points.end.x,
+                y2: points.end.y,
+              }),
+              height: distanceTwoPoints({
+                x1: points.start.x,
+                y1: points.start.y,
+                x2: points.end.x,
+                y2: points.end.y,
+              }),
+            },
+          ]
+        })
       },
     },
   })
@@ -173,6 +168,13 @@ const Board = () => {
   return (
     <div>
       <div>
+        <button
+          onClick={() => {
+            localStorage.setItem('shapes', JSON.stringify(rectangles))
+          }}
+        >
+          save
+        </button>
         <button
           onClick={() => {
             setStateController('idle')
