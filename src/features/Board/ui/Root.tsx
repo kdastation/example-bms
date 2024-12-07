@@ -4,6 +4,7 @@ import { Layer, Stage } from 'react-konva'
 
 import { mergeRefs } from '@shared/react/lib/mergeRefs'
 
+import { Arrow, type ArrowData } from './Arrow'
 import { Card, type CardData } from './Card'
 import { Circle, type CircleData } from './Circle'
 import { useController, type StateController } from './contoller/useController'
@@ -41,7 +42,18 @@ type CardShape = CardData & {
   type: 'card'
 }
 
-type ShapeData = RectangleShape | ImageShape | CircleShape | TextShape | LineShape | CardShape
+type ArrowShape = ArrowData & {
+  type: 'arrow'
+}
+
+type ShapeData =
+  | RectangleShape
+  | ImageShape
+  | CircleShape
+  | TextShape
+  | LineShape
+  | CardShape
+  | ArrowShape
 
 const initialRectangles: ShapeData[] = [
   {
@@ -73,12 +85,11 @@ const initialRectangles: ShapeData[] = [
     id: 'circle-1',
   },
   {
-    type: 'line',
+    type: 'arrow',
     x: 0,
     y: 0,
     id: 'line-1',
     stroke: 'red',
-    fill: 'red',
     points: [150, 150, 300, 300],
     width: distanceTwoPoints({ x1: 150, y1: 150, x2: 150, y2: 150 }),
     height: distanceTwoPoints({ x1: 150, y1: 150, x2: 150, y2: 150 }),
@@ -154,14 +165,15 @@ const Board = () => {
     },
     arrow: {
       onAdd: (points) => {
+        const newId = `arrow-${rectangles.length}`
+
         setRectangles((prev) => {
           return [
             ...prev,
             {
-              id: `line-${prev.length + 10}`,
+              id: newId,
               rotation: 0,
-              type: 'line',
-              fill: 'red',
+              type: 'arrow',
               stroke: 'red',
               x: 0,
               y: 0,
@@ -185,6 +197,10 @@ const Board = () => {
             },
           ]
         })
+
+        selectShapes([newId])
+
+        setStateController('idle')
       },
     },
     multiLine: {
@@ -287,13 +303,27 @@ const Board = () => {
         >
           <Layer>
             {rectangles.map((rect, i) => {
-              if (rect.type === 'card') {
-                console.log(
-                  rect.canCreateNewCard
-                    ? selectedIds.length === 1 && selectedIds.includes(rect.id)
-                    : false
-                )
+              if (rect.type === 'arrow') {
+                return (
+                  <Arrow
+                    key={rect.id}
+                    {...rect}
+                    onChange={(newAttrs) => {
+                      setRectangles((prevState) => {
+                        const rects = prevState.slice()
+                        rects[i] = {
+                          ...rects[i],
+                          ...newAttrs,
+                        }
 
+                        return rects
+                      })
+                    }}
+                  />
+                )
+              }
+
+              if (rect.type === 'card') {
                 return (
                   <Card
                     key={rect.id}

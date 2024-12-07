@@ -93,6 +93,7 @@ export const useArrowController = ({ onAdd }: ArrowControllerArgs): Controller =
             points={[points.start.x, points.start.y, points.end.x, points.end.y]}
             fill={'red'}
             stroke={'red'}
+            strokeWidth={8}
           />
         )}
       </>
