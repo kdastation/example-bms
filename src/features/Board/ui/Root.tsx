@@ -5,7 +5,7 @@ import { Layer, Stage } from 'react-konva'
 import { mergeRefs } from '@shared/react/lib/mergeRefs'
 
 import { Circle, type CircleData } from './Circle'
-import { useSelectController } from './contoller/useSelectController'
+import { useController, type StateController } from './contoller/useController'
 import { useZoomController } from './contoller/useZoomController'
 import { Image, type ImageData } from './Image'
 import { Rectangle, type RectangleData } from './Rectangle'
@@ -111,16 +111,36 @@ const Board = () => {
 
   const [selectedIds, selectShapes] = useState([])
 
-  const [isStartEditText, setIsStartEditText] = useState(false)
+  const [stateController, setStateController] = useState<StateController>('idle')
 
   const {
+    ref: refStageController,
     elements,
-    stageRef: stageRefSelectController,
-    ...handlers
-  } = useSelectController({
-    onSelect: selectShapes,
-    selected: selectedIds,
-    enabled: !isStartEditText,
+    stageProps,
+  } = useController(stateController, {
+    select: {
+      onSelect: selectShapes,
+      selected: selectedIds,
+    },
+    target: {
+      onTarget: ({ x, y }) => {
+        setRectangles((prev) => {
+          return [
+            ...prev,
+            {
+              x,
+              y,
+              fill: 'red',
+              width: 400,
+              height: 400,
+              id: `rectangle-${prev.length + 10}`,
+              rotation: 0,
+              type: 'rectangle',
+            },
+          ]
+        })
+      },
+    },
   })
 
   const { onWheel } = useZoomController({
@@ -128,69 +148,141 @@ const Board = () => {
   })
 
   return (
-    <SceneProvider stageRef={stageRef}>
-      <Stage
-        ref={mergeRefs([stageRef, stageRefSelectController])}
-        width={window.innerWidth}
-        height={window.innerHeight}
-        scaleX={stage.scale}
-        scaleY={stage.scale}
-        x={stage.x}
-        y={stage.y}
-        {...handlers}
-        onWheel={onWheel}
-      >
-        <Layer>
-          {rectangles.map((rect, i) => {
-            if (rect.type === 'text') {
-              return (
-                <Text
-                  key={rect.id}
-                  {...rect}
-                  onChange={(newAttrs) => {
-                    setRectangles((prevState) => {
-                      const rects = prevState.slice()
-                      rects[i] = {
-                        ...rects[i],
-                        ...newAttrs,
-                      }
+    <div>
+      <div>
+        <button
+          onClick={() => {
+            setStateController('idle')
+          }}
+        >
+          idle
+        </button>
 
-                      return rects
-                    })
-                  }}
-                  onEndChangeText={(newText) => {
-                    setRectangles((prevState) => {
-                      const rects = prevState.slice()
+        <button
+          onClick={() => {
+            setStateController('add')
+          }}
+        >
+          add
+        </button>
 
-                      if (rects[i].type === 'text') {
+        <button
+          onClick={() => {
+            setStateController('drag')
+          }}
+        >
+          drag
+        </button>
+      </div>
+      <SceneProvider stageRef={stageRef}>
+        <Stage
+          ref={mergeRefs([stageRef, refStageController])}
+          width={window.innerWidth}
+          height={window.innerHeight}
+          scaleX={stage.scale}
+          scaleY={stage.scale}
+          x={stage.x}
+          y={stage.y}
+          {...stageProps}
+          onWheel={onWheel}
+        >
+          <Layer>
+            {rectangles.map((rect, i) => {
+              if (rect.type === 'text') {
+                return (
+                  <Text
+                    key={rect.id}
+                    {...rect}
+                    onChange={(newAttrs) => {
+                      setRectangles((prevState) => {
+                        const rects = prevState.slice()
                         rects[i] = {
                           ...rects[i],
-                          text: newText,
+                          ...newAttrs,
                         }
-                      }
 
-                      return rects
-                    })
+                        return rects
+                      })
+                    }}
+                    onEndChangeText={(newText) => {
+                      setRectangles((prevState) => {
+                        const rects = prevState.slice()
 
-                    selectShapes([rect.id])
+                        if (rects[i].type === 'text') {
+                          rects[i] = {
+                            ...rects[i],
+                            text: newText,
+                          }
+                        }
 
-                    setTimeout(() => {
-                      setIsStartEditText(false)
-                    }, 100)
-                  }}
-                  onStartChangeText={() => {
-                    setIsStartEditText(true)
-                    selectShapes([])
-                  }}
-                />
-              )
-            }
+                        return rects
+                      })
 
-            if (rect.type === 'circle') {
+                      selectShapes([rect.id])
+
+                      setTimeout(() => {
+                        setStateController('idle')
+                      }, 100)
+                    }}
+                    onStartChangeText={() => {
+                      setStateController('edit-text')
+                      selectShapes([])
+                    }}
+                  />
+                )
+              }
+
+              if (rect.type === 'circle') {
+                return (
+                  <Circle
+                    key={rect.id}
+                    {...rect}
+                    onChange={(newAttrs) => {
+                      setRectangles((prevState) => {
+                        const rects = prevState.slice()
+                        rects[i] = {
+                          ...rects[i],
+                          ...newAttrs,
+                        }
+
+                        return rects
+                      })
+                    }}
+                  />
+                )
+              }
+
+              if (rect.type === 'image') {
+                return (
+                  <Image
+                    key={rect.id}
+                    {...rect}
+                    onChange={(newAttrs) => {
+                      setRectangles((prevState) => {
+                        const rects = prevState.slice()
+                        rects[i] = {
+                          ...rects[i],
+                          ...newAttrs,
+                        }
+
+                        return rects
+                      })
+                    }}
+                  />
+                )
+              }
+
               return (
-                <Circle
+                <Rectangle
                   key={rect.id}
-                  {...rect}
+                  width={rect.width}
+                  fill={rect.fill}
+                  y={rect.y}
+                  x={rect.x}
+                  canSelect={rect.canSelect}
+                  canDrag={rect.canDrag}
+                  height={rect.height}
+                  id={rect.id}
                   onChange={(newAttrs) => {
                     setRectangles((prevState) => {
                       const rects = prevState.slice()
@@ -204,62 +296,17 @@ const Board = () => {
                   }}
                 />
               )
-            }
+            })}
 
-            if (rect.type === 'image') {
-              return (
-                <Image
-                  key={rect.id}
-                  {...rect}
-                  onChange={(newAttrs) => {
-                    setRectangles((prevState) => {
-                      const rects = prevState.slice()
-                      rects[i] = {
-                        ...rects[i],
-                        ...newAttrs,
-                      }
+            {elements}
+          </Layer>
 
-                      return rects
-                    })
-                  }}
-                />
-              )
-            }
-
-            return (
-              <Rectangle
-                key={rect.id}
-                width={rect.width}
-                fill={rect.fill}
-                y={rect.y}
-                x={rect.x}
-                canSelect={rect.canSelect}
-                canDrag={rect.canDrag}
-                height={rect.height}
-                id={rect.id}
-                onChange={(newAttrs) => {
-                  setRectangles((prevState) => {
-                    const rects = prevState.slice()
-                    rects[i] = {
-                      ...rects[i],
-                      ...newAttrs,
-                    }
-
-                    return rects
-                  })
-                }}
-              />
-            )
-          })}
-
-          {elements}
-        </Layer>
-
-        <Layer>
-          <Transform ids={selectedIds} />
-        </Layer>
-      </Stage>
-    </SceneProvider>
+          <Layer>
+            <Transform ids={selectedIds} />
+          </Layer>
+        </Stage>
+      </SceneProvider>
+    </div>
   )
 }
 

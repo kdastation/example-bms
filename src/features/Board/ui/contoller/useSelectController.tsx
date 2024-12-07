@@ -2,17 +2,21 @@ import Konva from 'konva'
 import React, { useRef, useState, type MouseEvent } from 'react'
 import { Rect } from 'react-konva'
 
+import { type Controller } from '../types'
 import { getShapesCanBeSelect } from '../utils'
+
+export type SelectControllerArgs = {
+  onSelect: (shapes: string[]) => void
+  selected: string[]
+}
 
 export const useSelectController = ({
   onSelect,
   selected,
   enabled = true,
-}: {
-  onSelect: (shapes: string[]) => void
-  selected: string[]
+}: SelectControllerArgs & {
   enabled?: boolean
-}) => {
+}): Controller => {
   const rectRef = useRef<Konva.Rect | null>(null)
   const stageRef = useRef<Konva.Stage | null>(null)
 
@@ -42,7 +46,7 @@ export const useSelectController = ({
     })
   }
 
-  const onTouchStart = (e) => {
+  const onTouchStart = (e: Konva.KonvaEventObject<MouseEvent>) => {
     if (!enabled) {
       return
     }
@@ -144,7 +148,7 @@ export const useSelectController = ({
     updateSelectionRect()
   }
 
-  const onClick = (e) => {
+  const onClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
     if (!enabled) {
       return
     }
@@ -189,12 +193,8 @@ export const useSelectController = ({
   }
 
   return {
-    stageRef,
-    onClick,
-    onTouchStart,
-    onMouseDown,
-    onMouseMove,
-    onMouseUp,
+    ref: stageRef,
+    stageProps: { onClick, onTouchStart, onMouseDown, onMouseMove, onMouseUp },
     elements: <>{rect && <Rect ref={rectRef} fill='rgba(0,0,255,0.5)' {...rect} />}</>,
   }
 }
