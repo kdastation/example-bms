@@ -18,7 +18,6 @@ export const useSelectController = ({
   enabled?: boolean
 }): Controller => {
   const rectRef = useRef<Konva.Rect | null>(null)
-  const stageRef = useRef<Konva.Stage | null>(null)
 
   const [rect, setRect] = useState<{
     x: number
@@ -122,14 +121,14 @@ export const useSelectController = ({
     updateSelectionRect()
   }
 
-  const onMouseUp = () => {
+  const onMouseUp = (e: Konva.KonvaEventObject<MouseEvent>) => {
     if (!enabled) {
       return
     }
 
     selection.current.visible = false
 
-    const stage = stageRef.current
+    const stage = e.target.getStage() as Konva.Stage | null
 
     const { x1, x2, y1, y2 } = selection.current
 
@@ -214,7 +213,6 @@ export const useSelectController = ({
   }
 
   return {
-    ref: stageRef,
     stageProps: { onClick, onTouchStart, onMouseDown, onMouseMove, onMouseUp },
     elements: <>{rect && <Rect ref={rectRef} fill='rgba(0,0,255,0.5)' {...rect} />}</>,
   }

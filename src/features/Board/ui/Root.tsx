@@ -131,11 +131,7 @@ const Board = () => {
 
   const [stateController, setStateController] = useState<StateController>('idle')
 
-  const {
-    ref: refStageController,
-    elements,
-    stageProps,
-  } = useController(stateController, {
+  const { elements, stageProps } = useController(stateController, {
     select: {
       onSelect: selectShapes,
       selected: selectedIds,
@@ -291,7 +287,7 @@ const Board = () => {
       </div>
       <SceneProvider stageRef={stageRef}>
         <Stage
-          ref={mergeRefs([stageRef, refStageController])}
+          ref={stageRef}
           width={window.innerWidth}
           height={window.innerHeight}
           scaleX={stage.scale}

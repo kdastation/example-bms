@@ -1,5 +1,4 @@
-import type Konva from 'konva'
-import { type MutableRefObject, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { type StageProps } from 'react-konva'
 
 export type Shape = {
@@ -17,6 +16,5 @@ export type Shape = {
 
 export type Controller = {
   stageProps: Partial<StageProps>
-  ref?: MutableRefObject<Konva.Stage | null>
   elements?: ReactNode
 }
