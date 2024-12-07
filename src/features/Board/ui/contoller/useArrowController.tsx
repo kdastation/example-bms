@@ -1,6 +1,6 @@
 import type Konva from 'konva'
 import { useState, type MouseEvent } from 'react'
-import { Line } from 'react-konva'
+import { Arrow, Line } from 'react-konva'
 
 import { isNull } from '@shared/is'
 
@@ -89,7 +89,7 @@ export const useArrowController = ({ onAdd }: ArrowControllerArgs): Controller =
     elements: (
       <>
         {points && points.start && points.end && (
-          <Line
+          <Arrow
             points={[points.start.x, points.start.y, points.end.x, points.end.y]}
             fill={'red'}
             stroke={'red'}

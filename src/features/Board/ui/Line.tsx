@@ -50,7 +50,7 @@ export const Line = ({
       points={points}
       fill={fill}
       stroke={stroke}
-      strokeWidth={2}
+      strokeWidth={8}
       name={generateShapeName('line', {
         canSelect,
       })}

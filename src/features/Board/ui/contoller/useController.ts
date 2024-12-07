@@ -1,9 +1,10 @@
 import { type Controller } from '../types'
 import { useArrowController, type ArrowControllerArgs } from './useArrowController'
+import { useMiltyLineController, type MultiLineControllerArgs } from './useMultiLineController'
 import { useSelectController, type SelectControllerArgs } from './useSelectController'
 import { useTargetController, type TargetControllerArgs } from './useTargetController'
 
-export type StateController = 'idle' | 'add' | 'drag' | 'edit-text' | 'arrow'
+export type StateController = 'idle' | 'add' | 'drag' | 'edit-text' | 'arrow' | 'multi-line'
 
 export const useController = (
   state: StateController,
@@ -11,6 +12,7 @@ export const useController = (
     select: SelectControllerArgs
     target: TargetControllerArgs
     arrow: ArrowControllerArgs
+    multiLine: MultiLineControllerArgs
   }
 ): Controller => {
   const selectController = useSelectController(controllers.select)
@@ -18,6 +20,8 @@ export const useController = (
   const targetController = useTargetController(controllers.target)
 
   const arrowController = useArrowController(controllers.arrow)
+
+  const multiLineController = useMiltyLineController(controllers.multiLine)
 
   if (state === 'idle') {
     return selectController
@@ -41,6 +45,10 @@ export const useController = (
 
   if (state === 'arrow') {
     return arrowController
+  }
+
+  if (state === 'multi-line') {
+    return multiLineController
   }
 
   return {

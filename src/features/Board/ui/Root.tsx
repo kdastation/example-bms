@@ -143,6 +143,10 @@ const Board = () => {
               id: `rectangle-${prev.length + 10}`,
               rotation: 0,
               type: 'rectangle',
+              scale: {
+                x: 1,
+                y: 1,
+              },
             },
           ]
         })
@@ -174,9 +178,43 @@ const Board = () => {
                 x2: points.end.x,
                 y2: points.end.y,
               }),
+              scale: {
+                x: 1,
+                y: 1,
+              },
             },
           ]
         })
+      },
+    },
+    multiLine: {
+      onAdd: (points) => {
+        const newId = `line-kek-${rectangles.length}`
+        setRectangles((prev) => {
+          return [
+            ...prev,
+            {
+              type: 'line',
+              x: 0,
+              y: 0,
+              points,
+              fill: 'red',
+              stroke: 'red',
+              scale: {
+                x: 1,
+                y: 1,
+              },
+              width: 400,
+              height: 400,
+              id: newId,
+              rotation: 0,
+            },
+          ]
+        })
+
+        selectShapes([newId])
+
+        setStateController('idle')
       },
     },
   })
@@ -225,6 +263,14 @@ const Board = () => {
           }}
         >
           arrow
+        </button>
+
+        <button
+          onClick={() => {
+            setStateController('multi-line')
+          }}
+        >
+          multiline controller
         </button>
       </div>
       <SceneProvider stageRef={stageRef}>
@@ -278,7 +324,7 @@ const Board = () => {
                             type: 'card',
                             rotation: 0,
                             id: newCardId,
-                            fill: 'red',
+                            fill: rect.fill,
                             canCreateNewCard: true,
                             scale: {
                               x: 1,
