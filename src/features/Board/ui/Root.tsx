@@ -141,6 +141,11 @@ const Board = () => {
         })
       },
     },
+    arrow: {
+      onAdd: () => {
+        console.log('add')
+      },
+    },
   })
 
   const { onWheel } = useZoomController({
@@ -172,6 +177,14 @@ const Board = () => {
           }}
         >
           drag
+        </button>
+
+        <button
+          onClick={() => {
+            setStateController('arrow')
+          }}
+        >
+          arrow
         </button>
       </div>
       <SceneProvider stageRef={stageRef}>
