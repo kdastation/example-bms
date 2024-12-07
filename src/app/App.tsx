@@ -62,6 +62,22 @@ const initialShapes: Shape[] = [
     y: 300,
     canCreateNewCard: true,
   },
+  {
+    type: 'text',
+    scale: {
+      x: 1,
+      y: 1,
+    },
+    height: 400,
+    width: 400,
+    rotation: 0,
+    text: 'sadsada',
+    id: 'text-1',
+    fontSize: 14,
+    color: 'red',
+    x: 100,
+    y: 200,
+  },
 ]
 
 export const App = () => {
@@ -153,6 +169,21 @@ export const App = () => {
 
             if (event.type === 'change-tool') {
               setTool(event.tool)
+            }
+
+            if (event.type === 'end-change-text') {
+              setShapes((prev) => {
+                return prev.map((shape) => {
+                  if (shape.type === 'text' && shape.id === event.id) {
+                    return {
+                      ...shape,
+                      text: event.newText,
+                    }
+                  }
+
+                  return shape
+                })
+              })
             }
           }}
         />

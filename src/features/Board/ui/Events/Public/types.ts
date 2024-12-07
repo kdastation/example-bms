@@ -1,3 +1,4 @@
+import { type StateController } from '../../Contollers/useController'
 import { type Shape, type ShapeAttrs } from '../../Shape'
 
 export type EventChangeAttrs = {
@@ -23,7 +24,7 @@ type EventSelect = {
 
 type EventChangeTool = {
   type: 'change-tool'
-  tool: 'idle'
+  tool: StateController
 }
 
 type EventAddShape = {

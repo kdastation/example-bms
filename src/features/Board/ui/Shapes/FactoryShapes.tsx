@@ -49,6 +49,16 @@ export const FactoryShapes = ({ shape, selected }: Props) => {
               type: 'start-change-text',
               id: shape.id,
             })
+
+            onEvent?.({
+              type: 'select',
+              ids: [],
+            })
+
+            onEvent?.({
+              type: 'change-tool',
+              tool: 'edit-text',
+            })
           }}
           onEndChangeText={(newText) => {
             onEvent?.({
@@ -56,6 +66,18 @@ export const FactoryShapes = ({ shape, selected }: Props) => {
               newText: newText,
               id: shape.id,
             })
+
+            onEvent?.({
+              type: 'select',
+              ids: [shape.id],
+            })
+
+            setTimeout(() => {
+              onEvent?.({
+                type: 'change-tool',
+                tool: 'idle',
+              })
+            }, 100)
           }}
         />
       )
