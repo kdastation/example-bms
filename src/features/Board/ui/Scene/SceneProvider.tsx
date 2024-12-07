@@ -9,7 +9,7 @@ export type Scene = {
 
 const [SceneContextProvider, useScene] = createContext<Scene>({
   name: 'SceneContextProvider',
-  hookName: 'useDeps',
+  hookName: 'useScene',
   providerName: '<SceneContextProvider />',
 })
 

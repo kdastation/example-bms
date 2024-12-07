@@ -4,7 +4,7 @@ import { Layer, Stage } from 'react-konva'
 
 import { useController, type StateController } from './Contollers/useController'
 import { useZoomController } from './Contollers/useZoomController'
-import { SceneProvider } from './SceneProvider'
+import { SceneProvider } from './Scene/SceneProvider'
 import { type Shape } from './Shape'
 import { Arrow } from './Shapes/Arrow'
 import { Card } from './Shapes/Card'
@@ -13,7 +13,7 @@ import { Image } from './Shapes/Image'
 import { Line } from './Shapes/Line'
 import { Rectangle } from './Shapes/Rectangle'
 import { Text } from './Shapes/Text'
-import { StageProvider, useStage } from './StageProvider'
+import { StageStoreProvider, useStageStore } from './Store/StageStore'
 import { Transform } from './Transform'
 import { distanceTwoPoints } from './utils'
 
@@ -81,7 +81,7 @@ const initialRectangles: Shape[] = [
 const Board = () => {
   const stageRef = useRef<Konva.Stage | null>(null)
 
-  const stageStore = useStage()
+  const stageStore = useStageStore()
 
   const { setStage, ...stage } = stageStore((state) => state)
 
@@ -472,8 +472,8 @@ const Board = () => {
 
 export const Root = () => {
   return (
-    <StageProvider>
+    <StageStoreProvider>
       <Board />
-    </StageProvider>
+    </StageStoreProvider>
   )
 }
