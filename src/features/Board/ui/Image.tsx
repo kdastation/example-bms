@@ -2,26 +2,16 @@ import type Konva from 'konva'
 import { Image as ReactKonvaImage } from 'react-konva'
 import useImage from 'use-image'
 
-import { type Shape } from './types'
+import { type ImageData, type ShapeAttrs } from './Shape'
 import { generateShapeName, useDragShape, useTransformShape } from './utils'
 
-export type ImageData = Shape & {
-  src: string
-  canSelect?: boolean
-  canDrag?: boolean
-}
-
 type Events = {
-  onChange: (args: Shape) => void
+  onChange: (args: ShapeAttrs) => void
 }
 
-export const Image = ({
-  src,
-  canSelect = true,
-  canDrag = true,
-  onChange,
-  ...props
-}: ImageData & Events) => {
+type Props = ImageData & Events
+
+export const Image = ({ src, canSelect = true, canDrag = true, onChange, ...props }: Props) => {
   const [img] = useImage(src)
 
   const { onDragEnd } = useDragShape({

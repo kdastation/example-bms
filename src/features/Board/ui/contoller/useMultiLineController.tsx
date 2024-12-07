@@ -1,10 +1,10 @@
 import type Konva from 'konva'
 import { useState, type MouseEvent } from 'react'
-import { Arrow, Line } from 'react-konva'
+import { Line } from 'react-konva'
 
 import { isNull } from '@shared/is'
 
-import { type Controller } from '../types'
+import { type Controller } from './Controller'
 
 type Points = number[]
 

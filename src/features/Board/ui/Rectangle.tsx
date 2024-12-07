@@ -2,14 +2,14 @@ import type Konva from 'konva'
 import React from 'react'
 import { Rect } from 'react-konva'
 
-import { type Shape } from './types'
+import { type ShapeAttrs } from './Shape'
 import { generateShapeName, useDragShape, useTransformShape } from './utils'
 
-export type RectangleData = Shape & {
-  fill: string
-  canDrag?: boolean
-  canSelect?: boolean
+type Events = {
+  onChange: (args: ShapeAttrs) => void
 }
+
+type Props = ShapeAttrs & Events
 
 export const Rectangle = ({
   onChange,
@@ -17,9 +17,7 @@ export const Rectangle = ({
   canDrag = true,
   fill,
   ...props
-}: RectangleData & {
-  onChange: (args: Shape) => void
-}) => {
+}: Props) => {
   const { ref: refShapeForTransform, onTransformEnd } = useTransformShape<Konva.Rect>({
     onChange: (sizes) => {
       onChange?.({

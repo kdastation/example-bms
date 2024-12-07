@@ -1,19 +1,14 @@
 import type Konva from 'konva'
 import { Arrow as KonvaArrow } from 'react-konva'
 
-import { type Shape } from './types'
+import { type ArrowData, type ShapeAttrs } from './Shape'
 import { generateShapeName, useDragShape, useTransformShape } from './utils'
 
-export type ArrowData = Shape & {
-  stroke: string
-  points: number[]
-  canDrag?: boolean
-  canSelect?: boolean
+type Events = {
+  onChange: (args: ShapeAttrs) => void
 }
 
-type Events = {
-  onChange: (args: Shape) => void
-}
+type Props = ArrowData & Events
 
 export const Arrow = ({
   points,
@@ -23,7 +18,7 @@ export const Arrow = ({
   stroke,
   onChange,
   ...props
-}: ArrowData & Events) => {
+}: Props) => {
   const { onDragEnd } = useDragShape({
     onChange: (coords) => {
       onChange?.({

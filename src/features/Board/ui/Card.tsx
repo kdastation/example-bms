@@ -4,17 +4,8 @@ import { Circle, Group, Rect } from 'react-konva'
 
 import { callAllHandlers } from '@shared/react/lib/callAllHandlers'
 
-import { type Shape } from './types'
+import { type CardData, type ShapeAttrs } from './Shape'
 import { generateShapeName, useDragShape, useTransformShape } from './utils'
-
-export type CardData = Shape & {
-  fill: string
-  canDrag?: boolean
-  canSelect?: boolean
-
-  //TODO: вынести с этого типа,
-  canCreateNewCard?: boolean
-}
 
 type Events = {
   onAddCard?: ({
@@ -28,10 +19,12 @@ type Events = {
     x: number
     y: number
   }) => void
-  onChange?: (shape: Shape) => void
+  onChange?: (shape: ShapeAttrs) => void
 }
 
 type Direction = 'left' | 'right'
+
+type Props = CardData & Events
 
 export const Card = ({
   canDrag = true,
@@ -41,7 +34,7 @@ export const Card = ({
   onChange,
   canCreateNewCard,
   ...props
-}: CardData & Events) => {
+}: Props) => {
   const [canVisiblePoint, setCanVisiblePoint] = useState(false)
 
   const [visiblePredictCard, setVisiblePredictCard] = useState<Direction | null>(null)

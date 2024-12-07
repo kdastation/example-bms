@@ -1,30 +1,23 @@
 import type Konva from 'konva'
 import { Line as KonvaLine } from 'react-konva'
 
-import { type Shape } from './types'
+import { type LineData, type ShapeAttrs } from './Shape'
 import { generateShapeName, useDragShape, useTransformShape } from './utils'
 
-export type LineData = Shape & {
-  fill: string
-  stroke: string
-  points: number[]
-  canDrag?: boolean
-  canSelect?: boolean
+type Events = {
+  onChange: (args: ShapeAttrs) => void
 }
 
-type Events = {
-  onChange: (args: Shape) => void
-}
+type Props = LineData & Events
 
 export const Line = ({
   points,
-  fill,
   canDrag = true,
   canSelect = true,
   stroke,
   onChange,
   ...props
-}: LineData & Events) => {
+}: Props) => {
   const { onDragEnd } = useDragShape({
     onChange: (coords) => {
       onChange?.({
@@ -48,7 +41,6 @@ export const Line = ({
     <KonvaLine
       ref={refShapeForTransform}
       points={points}
-      fill={fill}
       stroke={stroke}
       strokeWidth={8}
       name={generateShapeName('line', {

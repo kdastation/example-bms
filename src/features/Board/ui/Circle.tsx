@@ -2,24 +2,16 @@ import type Konva from 'konva'
 import React from 'react'
 import { Circle as KonvaCircle } from 'react-konva'
 
-import { type Shape } from './types'
+import { type CircleData, type ShapeAttrs } from './Shape'
 import { generateShapeName, useDragShape, useTransformShape } from './utils'
 
-export type CircleData = Shape & {
-  fill: string
-  canDrag?: boolean
-  canSelect?: boolean
+type Events = {
+  onChange: (args: ShapeAttrs) => void
 }
 
-export const Circle = ({
-  onChange,
-  canSelect = true,
-  canDrag = true,
-  fill,
-  ...props
-}: CircleData & {
-  onChange: (args: Shape) => void
-}) => {
+type Props = CircleData & Events
+
+export const Circle = ({ onChange, canSelect = true, canDrag = true, fill, ...props }: Props) => {
   const { ref: refShapeForTransform, onTransformEnd } = useTransformShape<Konva.Circle>({
     onChange: (sizes) => {
       onChange?.({

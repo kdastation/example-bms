@@ -1,4 +1,4 @@
-import { type Controller } from '../types'
+import { type Controller } from './Controller'
 import { useArrowController, type ArrowControllerArgs } from './useArrowController'
 import { useMiltyLineController, type MultiLineControllerArgs } from './useMultiLineController'
 import { useSelectController, type SelectControllerArgs } from './useSelectController'

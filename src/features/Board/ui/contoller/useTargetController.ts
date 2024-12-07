@@ -1,7 +1,7 @@
 import type Konva from 'konva'
 import { type MouseEvent } from 'react'
 
-import { type Controller } from '../types'
+import { type Controller } from './Controller'
 
 export type TargetControllerArgs = {
   onTarget?: (args: { x: number; y: number }) => void

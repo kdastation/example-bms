@@ -6,19 +6,11 @@ import TextareaAutosize from 'react-textarea-autosize'
 
 import { mergeRefs } from '@shared/react/lib/mergeRefs'
 
-import { type Shape } from './types'
+import { type ShapeAttrs, type TextData } from './Shape'
 import { generateShapeName, useDragShape, useTransformShape } from './utils'
 
-export type TextData = Shape & {
-  text: string
-  color: string
-  canDrag?: boolean
-  canSelect?: boolean
-  fontSize?: number
-}
-
 type Events = {
-  onChange: (args: Shape) => void
+  onChange: (args: ShapeAttrs) => void
   onStartChangeText?: () => void
   onEndChangeText?: (text: string) => void
 }

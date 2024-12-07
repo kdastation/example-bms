@@ -2,60 +2,22 @@ import type Konva from 'konva'
 import React, { useRef, useState } from 'react'
 import { Layer, Stage } from 'react-konva'
 
-import { mergeRefs } from '@shared/react/lib/mergeRefs'
-
-import { Arrow, type ArrowData } from './Arrow'
-import { Card, type CardData } from './Card'
-import { Circle, type CircleData } from './Circle'
+import { Arrow } from './Arrow'
+import { Card } from './Card'
+import { Circle } from './Circle'
 import { useController, type StateController } from './contoller/useController'
 import { useZoomController } from './contoller/useZoomController'
-import { Image, type ImageData } from './Image'
-import { Line, type LineData } from './Line'
-import { Rectangle, type RectangleData } from './Rectangle'
+import { Image } from './Image'
+import { Line } from './Line'
+import { Rectangle } from './Rectangle'
 import { SceneProvider } from './SceneProvider'
+import { type Shape } from './Shape'
 import { StageProvider, useStage } from './StageProvider'
-import { Text, type TextData } from './Text'
+import { Text } from './Text'
 import { Transform } from './Transform'
 import { distanceTwoPoints } from './utils'
 
-type RectangleShape = RectangleData & {
-  type: 'rectangle'
-}
-
-type ImageShape = ImageData & {
-  type: 'image'
-}
-
-type CircleShape = CircleData & {
-  type: 'circle'
-}
-
-type TextShape = TextData & {
-  type: 'text'
-}
-
-type LineShape = LineData & {
-  type: 'line'
-}
-
-type CardShape = CardData & {
-  type: 'card'
-}
-
-type ArrowShape = ArrowData & {
-  type: 'arrow'
-}
-
-type ShapeData =
-  | RectangleShape
-  | ImageShape
-  | CircleShape
-  | TextShape
-  | LineShape
-  | CardShape
-  | ArrowShape
-
-const initialRectangles: ShapeData[] = [
+const initialRectangles: Shape[] = [
   {
     type: 'rectangle',
     y: 0,
@@ -123,7 +85,7 @@ const Board = () => {
 
   const { setStage, ...stage } = stageStore((state) => state)
 
-  const [rectangles, setRectangles] = useState<ShapeData[]>(
+  const [rectangles, setRectangles] = useState<Shape[]>(
     JSON.parse(localStorage.getItem('shapes')) || initialRectangles
   )
 
@@ -210,7 +172,6 @@ const Board = () => {
               x: 0,
               y: 0,
               points,
-              fill: 'red',
               stroke: 'red',
               scale: {
                 x: 1,

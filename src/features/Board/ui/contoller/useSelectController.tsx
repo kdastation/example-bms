@@ -2,8 +2,8 @@ import Konva from 'konva'
 import React, { useRef, useState, type MouseEvent } from 'react'
 import { Rect } from 'react-konva'
 
-import { type Controller } from '../types'
 import { distanceTwoPoints, getShapesCanBeSelect } from '../utils'
+import { type Controller } from './Controller'
 
 export type SelectControllerArgs = {
   onSelect: (shapes: string[]) => void
