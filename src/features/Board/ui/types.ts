@@ -4,4 +4,5 @@ export type Shape = {
   width: number
   height: number
   id: string
+  rotation: number
 }

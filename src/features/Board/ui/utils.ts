@@ -25,7 +25,13 @@ export const getShapesCanBeSelect = (stage: Konva.Stage) => {
 export const useTransformShape = <T extends Konva.Shape>({
   onChange,
 }: {
-  onChange: (args: { x: number; y: number; width: number; height: number }) => void
+  onChange: (args: {
+    x: number
+    y: number
+    width: number
+    height: number
+    rotation: number
+  }) => void
 }) => {
   const ref = useRef<T | null>(null)
 
@@ -47,6 +53,7 @@ export const useTransformShape = <T extends Konva.Shape>({
       y: node.y(),
       width: Math.max(5, node.width() * scaleX),
       height: Math.max(node.height() * scaleY),
+      rotation: node.rotation(),
     })
   }
 

@@ -92,6 +92,7 @@ export const Text = ({
             return {
               ...attrs,
               ...coords,
+              rotation: textNode?.rotation(),
             }
           }}
         >

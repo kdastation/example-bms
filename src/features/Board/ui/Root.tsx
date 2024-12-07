@@ -43,6 +43,7 @@ const initialRectangles: ShapeData[] = [
     canSelect: false,
     canDrag: false,
     type: 'rectangle',
+    rotation: 0,
   },
   {
     x: 150,
@@ -52,6 +53,7 @@ const initialRectangles: ShapeData[] = [
     fill: 'green',
     id: 'rect2',
     type: 'rectangle',
+    rotation: 0,
   },
   {
     x: 300,
@@ -61,6 +63,7 @@ const initialRectangles: ShapeData[] = [
     fill: 'green',
     id: 'rect3',
     type: 'rectangle',
+    rotation: 0,
   },
   {
     type: 'image',
@@ -72,6 +75,7 @@ const initialRectangles: ShapeData[] = [
     width: 300,
     height: 300,
     src: 'https://p.turbosquid.com/ts-thumb/sC/TOOTGK/10EZr9Lr/10/jpg/1445892121/600x600/fit_q87/e696373449ba51fba8734edcda4dca4f780585b4/10.jpg',
+    rotation: 0,
   },
   {
     x: 300,
@@ -81,6 +85,7 @@ const initialRectangles: ShapeData[] = [
     fill: 'green',
     id: 'circle1',
     type: 'circle',
+    rotation: 0,
   },
   {
     x: 350,
@@ -91,6 +96,7 @@ const initialRectangles: ShapeData[] = [
     text: 'asdsadad',
     color: 'red',
     id: 'text-1',
+    rotation: 0,
   },
 ]
 
@@ -102,6 +108,7 @@ const Board = () => {
   const { setStage, ...stage } = stageStore((state) => state)
 
   const [rectangles, setRectangles] = useState(initialRectangles)
+
   const [selectedIds, selectShapes] = useState([])
 
   const [isStartEditText, setIsStartEditText] = useState(false)
