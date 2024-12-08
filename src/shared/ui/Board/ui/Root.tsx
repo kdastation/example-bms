@@ -126,9 +126,13 @@ const Board = ({
   return (
     <DragDrop.Container>
       <Stage
+        style={{
+          border: '1px solid black',
+          width: 'fit-content',
+        }}
         ref={stageRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={900}
+        height={900}
         scaleX={stage.scale}
         scaleY={stage.scale}
         x={stage.x}

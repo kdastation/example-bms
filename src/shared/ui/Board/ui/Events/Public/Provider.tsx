@@ -1,8 +1,7 @@
 import React, { useMemo, type ReactNode } from 'react'
 
-import { useEventCallback } from '@shared/react/hooks/useEventCallback'
-import { createContext } from '@shared/react/lib/createContext'
-
+import { useEventCallback } from '../../../../../react/hooks/useEventCallback'
+import { createContext } from '../../../../../react/lib/createContext'
 import { type EventPublic } from './types'
 
 export type OnEvent = (event: EventPublic) => void

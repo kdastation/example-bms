@@ -4,8 +4,7 @@ import { Text as KonvaText } from 'react-konva'
 import { Html } from 'react-konva-utils'
 import TextareaAutosize from 'react-textarea-autosize'
 
-import { mergeRefs } from '@shared/react/lib/mergeRefs'
-
+import { mergeRefs } from '../../../../react/lib/mergeRefs'
 import { type ShapeAttrs, type TextData } from '../Shape'
 import { generateShapeName, useDragShape, useTransformShape } from '../utils'
 

@@ -2,8 +2,7 @@ import type Konva from 'konva'
 import { useState, type MouseEvent } from 'react'
 import { Arrow } from 'react-konva'
 
-import { isNull } from '@shared/is'
-
+import { isNull } from '../../../../is'
 import { type Controller } from './Controller'
 
 type RequireKeys<T extends object, K extends keyof T> = Required<Pick<T, K>> & Omit<T, K>

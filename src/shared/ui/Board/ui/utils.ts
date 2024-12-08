@@ -1,7 +1,7 @@
 import type Konva from 'konva'
 import { useRef } from 'react'
 
-import { isTruthy } from '@shared/is'
+import { isTruthy } from '../../../is'
 
 import Vector2d = Konva.Vector2d
 

@@ -1,5 +1,5 @@
 import merge from 'lodash/merge'
-import React, { type CSSProperties, type ReactElement, type ReactNode } from 'react'
+import React, { useId, type CSSProperties, type ReactElement, type ReactNode } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
@@ -43,6 +43,16 @@ const DragDropProvider = ({ children }: { children: ReactNode }) => {
               id,
             }),
           })
+
+          onEvent?.({
+            type: 'select',
+            ids: [id],
+          })
+
+          onEvent?.({
+            type: 'change-tool',
+            tool: 'idle',
+          })
         }, 0)
       }}
     >
@@ -60,8 +70,10 @@ const Container = ({ children }: { children: ReactNode }) => {
 }
 
 const DragDropElement = ({ children, shape }: { children: ReactElement; shape: DragDropShape }) => {
+  const id = useId()
+
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: 'draggable',
+    id,
     data: {
       shape,
     },

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Board, type Shape, type Tool } from '@features/Board'
+import { Board, type Shape, type Tool } from '@shared/ui/Board'
 
 const initialShapes: Shape[] = [
   {
@@ -187,7 +187,30 @@ export const App = () => {
                 color: 'red',
               }}
             >
-              Квадрат
+              миньон
+            </div>
+          </Board.DragDropElement>
+
+          <Board.DragDropElement
+            shape={{
+              type: 'text',
+              rotation: 0,
+              scale: {
+                x: 1,
+                y: 1,
+              },
+              height: 30,
+              width: 300,
+              text: 'asdsadadasdadadadada',
+              color: 'red',
+            }}
+          >
+            <div
+              style={{
+                color: 'red',
+              }}
+            >
+              Текст
             </div>
           </Board.DragDropElement>
           <Board.Board tool={tool} selected={selected} shapes={shapes} />

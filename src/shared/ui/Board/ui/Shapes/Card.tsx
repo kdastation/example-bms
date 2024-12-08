@@ -2,8 +2,7 @@ import type Konva from 'konva'
 import { useState } from 'react'
 import { Circle, Group, Rect } from 'react-konva'
 
-import { callAllHandlers } from '@shared/react/lib/callAllHandlers'
-
+import { callAllHandlers } from '../../../../react/lib/callAllHandlers'
 import { type CardData, type ShapeAttrs } from '../Shape'
 import { generateShapeName, useDragShape, useTransformShape } from '../utils'
 
