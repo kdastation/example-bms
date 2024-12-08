@@ -91,6 +91,7 @@ export const FactoryShapes = ({ shape, selected }: Props) => {
             shape.canCreateNewCard ? selected.length === 1 && selected.includes(shape.id) : false
           }
           onAddCard={(newCardAttrs) => {
+            //TODO: add generate id
             const id = uuidv4().toString()
 
             onEvent?.({

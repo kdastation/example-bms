@@ -1,7 +1,6 @@
 import type Konva from 'konva'
 import React, { useRef } from 'react'
 import { Layer, Stage } from 'react-konva'
-import { v4 as uuidv4 } from 'uuid'
 
 import { useController, type StateController } from './Contollers/useController'
 import { useZoomController } from './Contollers/useZoomController'
@@ -12,7 +11,6 @@ import { createArrow, createLine, createRectangle } from './Shapes/creators'
 import { FactoryShapes } from './Shapes/FactoryShapes'
 import { StageStoreProvider, useStageStore } from './Store/StageStore'
 import { Transform } from './Transform'
-import { distanceTwoPoints } from './utils'
 
 const Board = ({
   shapes,
@@ -43,29 +41,27 @@ const Board = ({
     },
     target: {
       onTarget: ({ x, y }) => {
-        const id = uuidv4().toString()
+        const newRectangle = createRectangle({
+          scale: {
+            x: 1,
+            y: 1,
+          },
+          width: 400,
+          height: 400,
+          x,
+          y,
+          fill: 'red',
+          rotation: 0,
+        })
 
         onEvent?.({
           type: 'add-shape',
-          shape: createRectangle({
-            id,
-            scale: {
-              x: 1,
-              y: 1,
-            },
-            width: 400,
-            height: 400,
-            x,
-            y,
-            type: 'rectangle',
-            fill: 'red',
-            rotation: 0,
-          }),
+          shape: newRectangle,
         })
 
         onEvent?.({
           type: 'select',
-          ids: [id],
+          ids: [newRectangle.id],
         })
 
         onEvent?.({
@@ -76,41 +72,19 @@ const Board = ({
     },
     arrow: {
       onAdd: (points) => {
-        const id = uuidv4().toString()
+        const newArrow = createArrow({
+          points: [points.start.x, points.start.y, points.end.x, points.end.y],
+          stroke: 'red',
+        })
 
-        //TODO: refactor
         onEvent?.({
           type: 'add-shape',
-          shape: createArrow({
-            id: id,
-            type: 'arrow',
-            x: 0,
-            y: 0,
-            rotation: 0,
-            points: [points.start.x, points.start.y, points.end.x, points.end.y],
-            width: distanceTwoPoints({
-              x1: points.start.x,
-              y1: points.start.y,
-              x2: points.end.x,
-              y2: points.end.y,
-            }),
-            height: distanceTwoPoints({
-              x1: points.start.x,
-              y1: points.start.y,
-              x2: points.end.x,
-              y2: points.end.y,
-            }),
-            scale: {
-              x: 1,
-              y: 1,
-            },
-            stroke: 'red',
-          }),
+          shape: newArrow,
         })
 
         onEvent?.({
           type: 'select',
-          ids: [id],
+          ids: [newArrow.id],
         })
 
         onEvent?.({
@@ -121,21 +95,8 @@ const Board = ({
     },
     multiLine: {
       onAdd: (points) => {
-        const id = uuidv4().toString()
-
         const newLine = createLine({
-          x: 0,
-          y: 0,
-          type: 'line',
-          height: 400,
-          width: 400,
-          id,
           points,
-          scale: {
-            x: 1,
-            y: 1,
-          },
-          rotation: 0,
           stroke: 'red',
         })
 
@@ -146,7 +107,7 @@ const Board = ({
 
         onEvent?.({
           type: 'select',
-          ids: [id],
+          ids: [newLine.id],
         })
 
         onEvent?.({
