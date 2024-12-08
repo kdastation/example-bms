@@ -1,9 +1,10 @@
 import { type ReactNode } from 'react'
 
+import { CursorSvg, DragSvg } from '@shared/assets/icons'
 import { Flex } from '@shared/ui/Flex'
+import { IconButton } from '@shared/ui/IconButton'
 
 import { type Tool as ToolType } from '../model/types'
-import { Tool } from './Tool'
 
 type Props = {
   selectedTool: ToolType
@@ -11,20 +12,26 @@ type Props = {
 }
 
 export const Tools = ({ selectedTool, onSelect }: Props) => {
-  const tools: { type: ToolType; icon: ReactNode }[] = [{ icon: 'idle', type: 'idle' }]
+  const tools: { type: ToolType; icon: ReactNode }[] = [
+    { icon: <CursorSvg />, type: 'idle' },
+    { type: 'drag', icon: <DragSvg /> },
+  ]
 
   return (
     <Flex align={'start'} direction={'column'} gap={32}>
       {tools.map((tool) => {
+        const isSelected = tool.type === selectedTool
+
         return (
-          <Tool
-            isSelected={selectedTool === tool.type}
+          <IconButton
+            variant={isSelected ? 'primary' : 'secondary'}
             key={tool.type}
-            icon={tool.icon}
             onClick={() => {
               onSelect?.(tool.type)
             }}
-          />
+          >
+            {tool.icon}
+          </IconButton>
         )
       })}
     </Flex>
