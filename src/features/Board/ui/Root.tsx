@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import { useStoreShapes } from '@entities/Shape'
 
@@ -71,46 +72,82 @@ const Root = () => {
   })
 
   return (
-    <>
-      <h1 style={{ textAlign: 'center' }}>Excalidraw Example</h1>
-      <div style={{ height: '500px' }}>
-        <Board.Root
-          onEvent={(event) => {
-            if (event.type === 'change-attrs') {
-              updateShapes(event.attrs.id, event.attrs)
-            }
+    <Board.Root
+      onEvent={(event) => {
+        if (event.type === 'change-attrs') {
+          updateShapes(event.attrs.id, event.attrs)
+        }
 
-            if (event.type === 'select') {
-              selectShapes(event.ids)
-            }
+        if (event.type === 'select') {
+          selectShapes(event.ids)
+        }
 
-            if (event.type === 'add-shape') {
-              storeShapes.add(event.shape)
-            }
+        if (event.type === 'add-shape') {
+          storeShapes.add(event.shape)
+        }
 
-            if (event.type === 'change-tool') {
-              setTool(event.tool)
-            }
+        if (event.type === 'change-tool') {
+          setTool(event.tool)
+        }
 
-            if (event.type === 'end-change-text') {
-              updateShapes(event.id, {
-                text: event.newText,
-              })
-            }
-          }}
-        >
-          <Flex gap={30} align={'start'}>
-            <Flex align={'start'} direction={'column'} gap={12}>
-              <Tools selectedTool={tool} onSelect={setTool} />
-            </Flex>
+        if (event.type === 'end-change-text') {
+          updateShapes(event.id, {
+            text: event.newText,
+          })
+        }
+      }}
+    >
+      <div
+        style={{
+          padding: '40px',
+          height: '100%',
+        }}
+      >
+        <PanelGroup direction={'horizontal'}>
+          <Panel defaultSize={5} minSize={5}>
+            <Tools selectedTool={tool} onSelect={setTool} />
+          </Panel>
+          <PanelResizeHandle
+            style={{
+              width: '8px',
+              background: '#39414d',
+            }}
+          />
 
-            <Flex align={'start'} gap={32} direction={'column'}>
+          <Panel defaultSize={30} minSize={20}>
+            <div
+              style={{
+                height: '78%',
+                border: '1px solid black',
+                marginBottom: '32px',
+              }}
+            >
               <Board.Board tool={tool} selected={selectedShapes} shapes={shapes} />
-              <ToolsShapes />
+            </div>
+
+            <ToolsShapes />
+          </Panel>
+
+          <PanelResizeHandle
+            style={{
+              width: '8px',
+              background: '#39414d',
+            }}
+          />
+          <Panel defaultSize={10} minSize={10}>
+            <Flex align={'start'}>
+              <OverridedShapesList />
             </Flex>
+          </Panel>
 
-            <OverridedShapesList />
+          <PanelResizeHandle
+            style={{
+              width: '8px',
+              background: '#39414d',
+            }}
+          />
 
+          <Panel defaultsize={20} minSize={10}>
             {selectedShapes.length === 1 && (
               <InfoTab
                 id={selectedShapes[0]}
@@ -119,10 +156,10 @@ const Root = () => {
                 }}
               />
             )}
-          </Flex>
-        </Board.Root>
+          </Panel>
+        </PanelGroup>
       </div>
-    </>
+    </Board.Root>
   )
 }
 

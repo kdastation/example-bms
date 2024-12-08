@@ -1,6 +1,7 @@
 import type Konva from 'konva'
 import React, { useRef, type ReactNode } from 'react'
 import { Layer, Stage } from 'react-konva'
+import useResizeObserver from 'use-resize-observer'
 
 import { useController, type StateController } from './Contollers/useController'
 import { useZoomController } from './Contollers/useZoomController'
@@ -23,6 +24,8 @@ const Board = ({
   tool: StateController
 }) => {
   const { stageRef } = useScene()
+
+  const { ref, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>()
 
   const stageStore = useStageStore()
 
@@ -124,15 +127,15 @@ const Board = ({
   })
 
   return (
-    <DragDrop.Container>
+    <DragDrop.Container ref={ref}>
       <Stage
         style={{
           border: '1px solid black',
-          width: 'fit-content',
+          width: '100%',
         }}
         ref={stageRef}
-        width={900}
-        height={900}
+        width={width}
+        height={height}
         scaleX={stage.scale}
         scaleY={stage.scale}
         x={stage.x}

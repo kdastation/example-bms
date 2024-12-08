@@ -5,7 +5,7 @@ const SIZE_TOOL = 100
 
 export const ToolsShapes = () => {
   return (
-    <Flex gap={32}>
+    <Flex wrap={'wrap'} gap={32}>
       <Board.DragDropElement
         shape={{
           type: 'image',

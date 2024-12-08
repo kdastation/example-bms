@@ -15,7 +15,7 @@ export const Root = ({ shapes, onSelect, selected }: Props) => {
   const recordSelected = listToRecord(selected || [], (id) => id)
 
   return (
-    <Flex direction={'column'}>
+    <Flex gap={32} direction={'column'}>
       {shapes.map((shape) => {
         return (
           <Card

@@ -1,5 +1,11 @@
 import merge from 'lodash/merge'
-import React, { useId, type CSSProperties, type ReactElement, type ReactNode } from 'react'
+import React, {
+  forwardRef,
+  useId,
+  type CSSProperties,
+  type ReactElement,
+  type ReactNode,
+} from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
@@ -7,6 +13,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { Slot } from '@radix-ui/react-slot'
 
 import { isNull } from '../../../../is'
+import { mergeRefs } from '../../../../react/lib/mergeRefs'
 import { useEventsPublic } from '../Events/Public'
 import { useScene } from '../Scene/SceneProvider'
 import { type DragDropShape } from '../Shape'
@@ -68,7 +75,7 @@ const DragDropProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-const Container = ({ children }: { children: ReactNode }) => {
+const Container = forwardRef<HTMLDivElement, { children: ReactNode }>(({ children }, ref) => {
   const { setNodeRef } = useDroppable({
     id: 'droppable',
   })
@@ -76,14 +83,15 @@ const Container = ({ children }: { children: ReactNode }) => {
   return (
     <div
       style={{
-        width: 'fit-content',
+        width: '100%',
+        height: '100%',
       }}
-      ref={setNodeRef}
+      ref={mergeRefs([setNodeRef, ref])}
     >
       {children}
     </div>
   )
-}
+})
 
 const DragDropElement = ({ children, shape }: { children: ReactElement; shape: DragDropShape }) => {
   const id = useId()
@@ -98,7 +106,7 @@ const DragDropElement = ({ children, shape }: { children: ReactElement; shape: D
   const style: CSSProperties = {
     opacity: isDragging ? 0.8 : 1,
     transform: CSS.Translate.toString(transform),
-    zIndex: isDragging ? 1 : 0,
+    zIndex: isDragging ? 900 : 0,
     position: 'relative',
   }
 

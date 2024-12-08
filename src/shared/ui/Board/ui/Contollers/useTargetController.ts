@@ -10,7 +10,7 @@ export type TargetControllerArgs = {
 export const useTargetController = ({ onTarget }: TargetControllerArgs): Controller => {
   return {
     stageProps: {
-      onMouseDown: (e: Konva.KonvaEventObject<MouseEvent>) => {
+      onMouseUp: (e: Konva.KonvaEventObject<MouseEvent>) => {
         onTarget?.({
           x: e.target.getRelativePointerPosition()?.x as number,
           y: e.target.getRelativePointerPosition()?.y as number,
