@@ -1,5 +1,6 @@
 import { useStoreShapes, type Shape } from '@entities/Shape'
 
+import { InfoImage } from './InfoImage'
 import { InfoRectangle } from './InfoRectangle'
 import { InfoText } from './InfoText'
 
@@ -21,7 +22,7 @@ export const Root = ({ id, onSave }: Props) => {
     case 'rectangle':
       return (
         <InfoRectangle
-          rectangle={shape}
+          values={shape}
           onSave={(values) => {
             onSave?.(shape!.id, values)
           }}
@@ -31,7 +32,17 @@ export const Root = ({ id, onSave }: Props) => {
     case 'text':
       return (
         <InfoText
-          text={shape}
+          values={shape}
+          onSave={(values) => {
+            onSave?.(shape!.id, values)
+          }}
+        />
+      )
+
+    case 'image':
+      return (
+        <InfoImage
+          values={shape}
           onSave={(values) => {
             onSave?.(shape!.id, values)
           }}

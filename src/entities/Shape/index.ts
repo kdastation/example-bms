@@ -6,4 +6,5 @@ export {
   type CircleShape,
   type CardShape,
   type TextShape,
+  type ImageShape,
 } from './model/types'

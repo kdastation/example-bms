@@ -6,8 +6,8 @@ import { NumberInput } from '@shared/ui/Inputs/NumberInput'
 type Values = {
   width: number
   height: number
-  fill: string
   rotation: number
+  src: string
 }
 
 type Props = {
@@ -16,9 +16,8 @@ type Props = {
   onSave?: (values: Values) => void
 }
 
-export const InfoRectangle = ({ values, onSave }: Props) => {
+export const InfoImage = ({ values, onSave }: Props) => {
   const {
-    register,
     handleSubmit,
     formState: { isDirty },
     control,
@@ -50,6 +49,14 @@ export const InfoRectangle = ({ values, onSave }: Props) => {
         <Controller
           control={control}
           render={({ field: { value, onChange } }) => {
+            return <input type='text' value={value ?? values.src} onChange={onChange} />
+          }}
+          name={'src'}
+        />
+
+        <Controller
+          control={control}
+          render={({ field: { value, onChange } }) => {
             return (
               <NumberInput
                 minValue={0}
@@ -61,8 +68,6 @@ export const InfoRectangle = ({ values, onSave }: Props) => {
           }}
           name={'height'}
         />
-
-        <input type='color' {...register('fill')} defaultValue={values.fill} />
 
         <Controller
           control={control}

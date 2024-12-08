@@ -1,24 +1,22 @@
 import { Controller, useForm } from 'react-hook-form'
 import TextareaAutosize from 'react-textarea-autosize'
 
-import { type TextShape } from '@entities/Shape'
-
 import { Flex } from '@shared/ui/Flex'
 import { NumberInput } from '@shared/ui/Inputs/NumberInput'
 
 type Values = {
   text: string
   color: string
-  fontSize: number
+  fontSize?: number
 }
 
 type Props = {
-  text: TextShape
+  values: Values
 
   onSave?: (values: Values) => void
 }
 
-export const InfoText = ({ text, onSave }: Props) => {
+export const InfoText = ({ values, onSave }: Props) => {
   const {
     register,
     handleSubmit,
@@ -33,7 +31,7 @@ export const InfoText = ({ text, onSave }: Props) => {
           onSave?.(values)
         })}
       >
-        <TextareaAutosize {...register('text')} defaultValue={text.text} />
+        <TextareaAutosize {...register('text')} defaultValue={values.text} />
 
         <Controller
           control={control}
@@ -43,7 +41,7 @@ export const InfoText = ({ text, onSave }: Props) => {
                 minValue={8}
                 maxValue={30}
                 type='number'
-                value={value ?? text.fontSize}
+                value={value ?? values.fontSize}
                 onChange={onChange}
               />
             )
@@ -51,7 +49,7 @@ export const InfoText = ({ text, onSave }: Props) => {
           name={'fontSize'}
         />
 
-        <input type='color' {...register('color')} defaultValue={text.color} />
+        <input type='color' {...register('color')} defaultValue={values.color} />
 
         {isDirty && <button type={'submit'}>Сохранить изменения</button>}
       </form>
