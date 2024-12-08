@@ -2,6 +2,7 @@ import type Konva from 'konva'
 import { useRef } from 'react'
 
 import { isTruthy } from '../../../is'
+import { useScene } from './Scene/SceneProvider'
 
 import Vector2d = Konva.Vector2d
 
@@ -101,4 +102,32 @@ export const distanceTwoPoints = ({
   y2: number
 }): number => {
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+}
+
+export const useZoomOnShape = () => {
+  const { stageRef } = useScene()
+
+  return (id: string) => {
+    const stage = stageRef.current
+
+    if (!stage) {
+      return
+    }
+
+    const shape = stage.findOne(`#${id}`)
+
+    if (!shape) {
+      console.error('Not found shape')
+      return
+    }
+
+    const box = shape.getClientRect()
+
+    stage.to({
+      x: -shape.getPosition().x + stage.width() / 2 - box.width / 2,
+      y: -shape.getPosition().y + stage.height() / 2 - box.height / 2,
+      scaleX: 1,
+      scaleY: 1,
+    })
+  }
 }

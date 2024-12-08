@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-import { Board, type Shape, type Tool } from '@shared/ui/Board'
+import { Board, utils, type Shape, type Tool } from '@shared/ui/Board'
 import { Flex } from '@shared/ui/Flex'
 
-import { ShapesList } from '../packages/ShapesList'
+import { ShapesList, type PropsShapesList } from '../packages/ShapesList'
 import { ToolsShapes } from '../packages/ToolShapes'
 
 const initialShapes: Shape[] = [
@@ -67,6 +67,22 @@ const initialShapes: Shape[] = [
     y: 200,
   },
 ]
+
+const OverridedShapesList = ({ shapes, onSelect, selected }: PropsShapesList) => {
+  const zoomOnShape = utils.useZoomOnShape()
+
+  return (
+    <ShapesList
+      shapes={shapes}
+      selected={selected}
+      onSelect={(id) => {
+        onSelect?.(id)
+
+        zoomOnShape(id)
+      }}
+    />
+  )
+}
 
 export const Root = () => {
   const [selected, setSelected] = useState<string[]>([])
@@ -176,7 +192,7 @@ export const Root = () => {
           <Flex gap={30} align={'start'}>
             <Board.Board tool={tool} selected={selected} shapes={shapes} />
 
-            <ShapesList
+            <OverridedShapesList
               selected={selected}
               onSelect={(id) => {
                 setSelected([id])

@@ -4,7 +4,7 @@ import { Flex } from '@shared/ui/Flex'
 
 import { Card } from './Card'
 
-type Props = {
+export type Props = {
   shapes: Shape[]
   onSelect?: (id: string) => void
   selected?: string[]
