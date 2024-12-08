@@ -169,7 +169,19 @@ export const App = () => {
             }
           }}
         >
-          <Board.DragDropElement>
+          <Board.DragDropElement
+            shape={{
+              type: 'image',
+              rotation: 0,
+              scale: {
+                x: 1,
+                y: 1,
+              },
+              height: 400,
+              width: 400,
+              src: 'https://static.insales-cdn.com/images/products/1/7222/329129014/2._%D0%BC%D0%B8%D0%BD%D1%8C%D0%BE%D0%BD_610%D1%85850_%D0%BC%D0%BC.jpg',
+            }}
+          >
             <div
               style={{
                 color: 'red',

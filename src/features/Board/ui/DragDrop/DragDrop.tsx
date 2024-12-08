@@ -1,4 +1,6 @@
+import merge from 'lodash/merge'
 import React, { type CSSProperties, type ReactElement, type ReactNode } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
@@ -6,7 +8,7 @@ import { Slot } from '@radix-ui/react-slot'
 
 import { useEventsPublic } from '../Events/Public'
 import { useScene } from '../Scene/SceneProvider'
-import { createRectangle } from '../Shapes/creators'
+import { type DragDropShape } from '../Shape'
 
 const DragDropProvider = ({ children }: { children: ReactNode }) => {
   const { stageRef } = useScene()
@@ -18,7 +20,7 @@ const DragDropProvider = ({ children }: { children: ReactNode }) => {
       onDragEnd={(event) => {
         const stage = stageRef.current
 
-        console.log(event)
+        const newShape = event.active.data.current.shape as DragDropShape
 
         if (!stage) {
           return
@@ -31,19 +33,14 @@ const DragDropProvider = ({ children }: { children: ReactNode }) => {
             return
           }
 
+          const id = uuidv4().toString()
+
           onEvent?.({
             type: 'add-shape',
-            shape: createRectangle({
+            shape: merge(newShape, {
               x: pointerPosition.x,
               y: pointerPosition.y,
-              width: 400,
-              height: 400,
-              fill: 'blue',
-              scale: {
-                x: 1,
-                y: 1,
-              },
-              rotation: 0,
+              id,
             }),
           })
         }, 0)
@@ -57,18 +54,16 @@ const DragDropProvider = ({ children }: { children: ReactNode }) => {
 const Container = ({ children }: { children: ReactNode }) => {
   const { setNodeRef } = useDroppable({
     id: 'droppable',
-    data: {
-      accepts: ['type1', 'type2'],
-    },
   })
+
   return <div ref={setNodeRef}>{children}</div>
 }
 
-const DragDropElement = ({ children }: { children: ReactElement }) => {
+const DragDropElement = ({ children, shape }: { children: ReactElement; shape: DragDropShape }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: 'draggable',
     data: {
-      type: 'type1',
+      shape,
     },
   })
 
