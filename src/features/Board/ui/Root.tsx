@@ -2,9 +2,11 @@ import { useState } from 'react'
 
 import { useStoreShapes } from '@entities/Shape'
 
+import { useEventListener } from '@shared/react/hooks/useEventListener'
 import { Board, utils, type Tool } from '@shared/ui/Board'
 import { Flex } from '@shared/ui/Flex'
 
+import { useDelete } from '../packages/Delete'
 import { apiSelectShapes, ProviderSelectShapes } from '../packages/Select'
 import { ShapesList } from '../packages/ShapesList'
 import { ToolsShapes } from '../packages/ToolShapes'
@@ -41,6 +43,15 @@ const Root = () => {
   const selectedShapes = apiSelectShapes.useGetSelectedIds()
 
   const selectShapes = apiSelectShapes.useSelect()
+
+  const deleteShapes = useDelete()
+
+  useEventListener('keydown', (event) => {
+    if (event.key === 'Delete' && selectedShapes.length > 0) {
+      deleteShapes(selectedShapes)
+      selectShapes([])
+    }
+  })
 
   const [tool, setTool] = useState<Tool>('idle')
 
