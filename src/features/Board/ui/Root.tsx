@@ -1,72 +1,12 @@
 import { useState } from 'react'
 
-import { Board, utils, type Shape, type Tool } from '@shared/ui/Board'
+import { useStoreShapes } from '@entities/Shape'
+
+import { Board, utils, type Tool } from '@shared/ui/Board'
 import { Flex } from '@shared/ui/Flex'
 
 import { ShapesList, type PropsShapesList } from '../packages/ShapesList'
 import { ToolsShapes } from '../packages/ToolShapes'
-
-const initialShapes: Shape[] = [
-  {
-    type: 'rectangle',
-    y: 0,
-    x: 0,
-    height: 120,
-    width: 160,
-    fill: 'red',
-    scale: {
-      x: 1,
-      y: 1,
-    },
-    id: 'rect-1',
-    rotation: 0,
-  },
-  {
-    type: 'circle',
-    x: 100,
-    y: 100,
-    rotation: 0,
-    scale: {
-      x: 1,
-      y: 1,
-    },
-    fill: 'green',
-    width: 40,
-    height: 40,
-    id: 'circle-1',
-  },
-  {
-    type: 'card',
-    rotation: 0,
-    scale: {
-      x: 1,
-      y: 1,
-    },
-    height: 400,
-    width: 400,
-    fill: 'rgb(255, 249, 177)',
-    id: 'card-1',
-    x: 300,
-    y: 300,
-    canCreateNewCard: true,
-  },
-  {
-    type: 'text',
-    scale: {
-      x: 1,
-      y: 1,
-    },
-    height: 400,
-    width: 400,
-    rotation: 0,
-    text: 'sadsada',
-    id: 'text-1',
-    fontSize: 14,
-    color: 'red',
-    x: 100,
-    y: 200,
-  },
-]
 
 const OverridedShapesList = ({ shapes, onSelect, selected }: PropsShapesList) => {
   const zoomOnShape = utils.useZoomOnShape()
@@ -87,9 +27,9 @@ const OverridedShapesList = ({ shapes, onSelect, selected }: PropsShapesList) =>
 export const Root = () => {
   const [selected, setSelected] = useState<string[]>([])
 
-  const [shapes, setShapes] = useState<Shape[]>(
-    JSON.parse(localStorage.getItem('shapes')) || initialShapes
-  )
+  const storeShapes = useStoreShapes()
+
+  const shapes = storeShapes.shapes
 
   const [tool, setTool] = useState<Tool>('idle')
 
@@ -147,18 +87,7 @@ export const Root = () => {
         <Board.Root
           onEvent={(event) => {
             if (event.type === 'change-attrs') {
-              setShapes((prevState) => {
-                return prevState.map((shape) => {
-                  if (shape.id === event.attrs.id) {
-                    return {
-                      ...shape,
-                      ...event.attrs,
-                    }
-                  }
-
-                  return shape
-                })
-              })
+              storeShapes.update(event.attrs.id, event.attrs)
             }
 
             if (event.type === 'select') {
@@ -166,7 +95,7 @@ export const Root = () => {
             }
 
             if (event.type === 'add-shape') {
-              setShapes((prev) => [...prev, event.shape])
+              storeShapes.add(event.shape)
             }
 
             if (event.type === 'change-tool') {
@@ -174,17 +103,8 @@ export const Root = () => {
             }
 
             if (event.type === 'end-change-text') {
-              setShapes((prev) => {
-                return prev.map((shape) => {
-                  if (shape.type === 'text' && shape.id === event.id) {
-                    return {
-                      ...shape,
-                      text: event.newText,
-                    }
-                  }
-
-                  return shape
-                })
+              storeShapes.update(event.id, {
+                text: event.newText,
               })
             }
           }}

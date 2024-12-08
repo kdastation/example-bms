@@ -1,5 +1,6 @@
+import { type Shape } from '@entities/Shape'
+
 import { listToRecord } from '@shared/lib/lisToRecord'
-import { type Shape } from '@shared/ui/Board'
 import { Flex } from '@shared/ui/Flex'
 
 import { Card } from './Card'
