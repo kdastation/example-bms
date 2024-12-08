@@ -1,11 +1,11 @@
 import type Konva from 'konva'
-import React, { useRef } from 'react'
+import React, { useRef, type ReactNode } from 'react'
 import { Layer, Stage } from 'react-konva'
 
 import { useController, type StateController } from './Contollers/useController'
 import { useZoomController } from './Contollers/useZoomController'
 import { EventsPublicProvider, useEventsPublic, type OnEvent } from './Events/Public'
-import { SceneProvider } from './Scene/SceneProvider'
+import { SceneProvider, useScene } from './Scene/SceneProvider'
 import { type Shape } from './Shape'
 import { createArrow, createLine, createRectangle } from './Shapes/creators'
 import { FactoryShapes } from './Shapes/FactoryShapes'
@@ -17,11 +17,11 @@ const Board = ({
   selected,
   tool,
 }: {
-  shapes: Shape[] //TODO: refactor
+  shapes: Shape[]
   selected: string[]
   tool: StateController
 }) => {
-  const stageRef = useRef<Konva.Stage | null>(null)
+  const { stageRef } = useScene()
 
   const stageStore = useStageStore()
 
@@ -123,53 +123,56 @@ const Board = ({
   })
 
   return (
-    <SceneProvider stageRef={stageRef}>
-      <Stage
-        ref={stageRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
-        scaleX={stage.scale}
-        scaleY={stage.scale}
-        x={stage.x}
-        y={stage.y}
-        {...stageProps}
-        onWheel={onWheel}
-      >
-        <Layer>
-          {shapes.map((shape) => {
-            return <FactoryShapes selected={selected} key={shape.id} shape={shape} />
-          })}
+    <Stage
+      ref={stageRef}
+      width={window.innerWidth}
+      height={window.innerHeight}
+      scaleX={stage.scale}
+      scaleY={stage.scale}
+      x={stage.x}
+      y={stage.y}
+      {...stageProps}
+      onWheel={onWheel}
+    >
+      <Layer>
+        {shapes.map((shape) => {
+          return <FactoryShapes selected={selected} key={shape.id} shape={shape} />
+        })}
 
-          {elements}
-        </Layer>
+        {elements}
+      </Layer>
 
-        <Layer>
-          <Transform ids={selected} />
-        </Layer>
-      </Stage>
-    </SceneProvider>
+      <Layer>
+        <Transform ids={selected} />
+      </Layer>
+    </Stage>
   )
 }
 
-type Props = {
-  onEvent?: OnEvent
-  shapes: Shape[]
-  tool: StateController
+export const Root = ({ onEvent, children }: { onEvent?: OnEvent; children: ReactNode }) => {
+  const stageRef = useRef<Konva.Stage | null>(null)
 
-  //TODO: refactor
-  selected: string[]
-}
-
-export const Root = ({ onEvent, shapes, selected, tool }: Props) => {
   return (
     <EventsPublicProvider
       onEvent={(event) => {
         onEvent?.(event)
       }}
     >
-      <StageStoreProvider>
-        <Board tool={tool} selected={selected} shapes={shapes} />
-      </StageStoreProvider>
+      <SceneProvider stageRef={stageRef}>{children}</SceneProvider>
     </EventsPublicProvider>
+  )
+}
+
+type Props = {
+  shapes: Shape[]
+  selected: string[]
+  tool: StateController
+}
+
+export const RootBoard = ({ ...props }: Props) => {
+  return (
+    <StageStoreProvider>
+      <Board {...props} />
+    </StageStoreProvider>
   )
 }
