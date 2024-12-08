@@ -1,6 +1,7 @@
 import { useStoreShapes, type Shape } from '@entities/Shape'
 
 import { InfoRectangle } from './InfoRectangle'
+import { InfoText } from './InfoText'
 
 type Props = {
   id: string
@@ -21,6 +22,16 @@ export const Root = ({ id, onSave }: Props) => {
       return (
         <InfoRectangle
           rectangle={shape}
+          onSave={(values) => {
+            onSave?.(shape!.id, values)
+          }}
+        />
+      )
+
+    case 'text':
+      return (
+        <InfoText
+          text={shape}
           onSave={(values) => {
             onSave?.(shape!.id, values)
           }}
