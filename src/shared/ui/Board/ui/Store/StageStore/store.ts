@@ -11,7 +11,7 @@ export type Store = {
 }
 
 export const createStore = () => {
-  return create(
+  return create<Store>(
     immer<Store>((set) => ({
       x: 0,
       y: 0,

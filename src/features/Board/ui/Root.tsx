@@ -5,18 +5,27 @@ import { useStoreShapes } from '@entities/Shape'
 import { Board, utils, type Tool } from '@shared/ui/Board'
 import { Flex } from '@shared/ui/Flex'
 
-import { ShapesList, type PropsShapesList } from '../packages/ShapesList'
+import { apiSelectShapes, ProviderSelectShapes } from '../packages/Select'
+import { ShapesList } from '../packages/ShapesList'
 import { ToolsShapes } from '../packages/ToolShapes'
 
-const OverridedShapesList = ({ shapes, onSelect, selected }: PropsShapesList) => {
+const OverridedShapesList = () => {
+  const storeShapes = useStoreShapes()
+
+  const shapes = storeShapes.shapes
+
+  const selectedShapes = apiSelectShapes.useGetSelectedIds()
+
+  const selectShapes = apiSelectShapes.useSelect()
+
   const zoomOnShape = utils.useZoomOnShape()
 
   return (
     <ShapesList
       shapes={shapes}
-      selected={selected}
+      selected={selectedShapes}
       onSelect={(id) => {
-        onSelect?.(id)
+        selectShapes?.(id)
 
         zoomOnShape(id)
       }}
@@ -24,12 +33,14 @@ const OverridedShapesList = ({ shapes, onSelect, selected }: PropsShapesList) =>
   )
 }
 
-export const Root = () => {
-  const [selected, setSelected] = useState<string[]>([])
-
+const Root = () => {
   const storeShapes = useStoreShapes()
 
   const shapes = storeShapes.shapes
+
+  const selectedShapes = apiSelectShapes.useGetSelectedIds()
+
+  const selectShapes = apiSelectShapes.useSelect()
 
   const [tool, setTool] = useState<Tool>('idle')
 
@@ -91,7 +102,7 @@ export const Root = () => {
             }
 
             if (event.type === 'select') {
-              setSelected(event.ids)
+              selectShapes(event.ids)
             }
 
             if (event.type === 'add-shape') {
@@ -110,15 +121,9 @@ export const Root = () => {
           }}
         >
           <Flex gap={30} align={'start'}>
-            <Board.Board tool={tool} selected={selected} shapes={shapes} />
+            <Board.Board tool={tool} selected={selectedShapes} shapes={shapes} />
 
-            <OverridedShapesList
-              selected={selected}
-              onSelect={(id) => {
-                setSelected([id])
-              }}
-              shapes={shapes}
-            />
+            <OverridedShapesList />
           </Flex>
 
           <div
@@ -131,5 +136,13 @@ export const Root = () => {
         </Board.Root>
       </div>
     </>
+  )
+}
+
+export const RootProvider = () => {
+  return (
+    <ProviderSelectShapes>
+      <Root />
+    </ProviderSelectShapes>
   )
 }
