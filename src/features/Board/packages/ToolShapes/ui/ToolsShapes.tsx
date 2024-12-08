@@ -37,14 +37,14 @@ export const ToolsShapes = () => {
           },
           height: 300,
           width: 300,
-          fill: 'blue',
+          fill: '#15cb85',
         }}
       >
         <div
           style={{
             width: SIZE_TOOL,
             height: SIZE_TOOL,
-            background: 'blue',
+            background: '#15cb85',
           }}
         />
       </Board.DragDropElement>

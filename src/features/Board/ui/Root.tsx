@@ -7,9 +7,11 @@ import { Board, utils, type Tool } from '@shared/ui/Board'
 import { Flex } from '@shared/ui/Flex'
 
 import { useDelete } from '../packages/Delete'
+import { InfoTab } from '../packages/InfoShape'
 import { apiSelectShapes, ProviderSelectShapes } from '../packages/Select'
 import { ShapesList } from '../packages/ShapesList'
 import { ToolsShapes } from '../packages/ToolShapes'
+import { useUpdate } from '../packages/Update'
 
 const OverridedShapesList = () => {
   const storeShapes = useStoreShapes()
@@ -45,6 +47,8 @@ const Root = () => {
   const selectShapes = apiSelectShapes.useSelect()
 
   const deleteShapes = useDelete()
+
+  const updateShapes = useUpdate()
 
   useEventListener('keydown', (event) => {
     if (event.key === 'Delete' && selectedShapes.length > 0) {
@@ -109,7 +113,7 @@ const Root = () => {
         <Board.Root
           onEvent={(event) => {
             if (event.type === 'change-attrs') {
-              storeShapes.update(event.attrs.id, event.attrs)
+              updateShapes(event.attrs.id, event.attrs)
             }
 
             if (event.type === 'select') {
@@ -125,7 +129,7 @@ const Root = () => {
             }
 
             if (event.type === 'end-change-text') {
-              storeShapes.update(event.id, {
+              updateShapes(event.id, {
                 text: event.newText,
               })
             }
@@ -135,6 +139,14 @@ const Root = () => {
             <Board.Board tool={tool} selected={selectedShapes} shapes={shapes} />
 
             <OverridedShapesList />
+            {selectedShapes.length === 1 && (
+              <InfoTab
+                id={selectedShapes[0]}
+                onSave={(id, values) => {
+                  updateShapes(id, values)
+                }}
+              />
+            )}
           </Flex>
 
           <div

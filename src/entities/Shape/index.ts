@@ -1,3 +1,3 @@
 export { useStore as useStoreShapes } from './model/store'
 
-export { type Shape } from './model/types'
+export { type Shape, type RectangleShape, type CircleShape, type CardShape } from './model/types'
