@@ -1,2 +1,5 @@
 export { default as CursorSvg } from './cursor.svg?react'
 export { default as DragSvg } from './drag.svg?react'
+export { default as ArrowSvg } from './arrow.svg?react'
+export { default as LineChartSvg } from './lineChart.svg?react'
+export { default as RectangleSvg } from './rectangle.svg?react'

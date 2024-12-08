@@ -51,7 +51,7 @@ const Board = ({
           height: 400,
           x,
           y,
-          fill: 'red',
+          fill: '#4387b1',
           rotation: 0,
         })
 

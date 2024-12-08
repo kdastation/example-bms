@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
 
-import { CursorSvg, DragSvg } from '@shared/assets/icons'
+import { ArrowSvg, CursorSvg, DragSvg, LineChartSvg, RectangleSvg } from '@shared/assets/icons'
 import { Flex } from '@shared/ui/Flex'
 import { IconButton } from '@shared/ui/IconButton'
 
@@ -15,6 +15,9 @@ export const Tools = ({ selectedTool, onSelect }: Props) => {
   const tools: { type: ToolType; icon: ReactNode }[] = [
     { icon: <CursorSvg />, type: 'idle' },
     { type: 'drag', icon: <DragSvg /> },
+    { type: 'arrow', icon: <ArrowSvg /> },
+    { type: 'multi-line', icon: <LineChartSvg /> },
+    { type: 'add', icon: <RectangleSvg /> },
   ]
 
   return (

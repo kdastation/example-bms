@@ -58,6 +58,16 @@ const Root = () => {
       deleteShapes(selectedShapes)
       selectShapes([])
     }
+
+    if (event.code === 'Space') {
+      setTool('drag')
+    }
+  })
+
+  useEventListener('keyup', (event) => {
+    if (event.code === 'Space') {
+      setTool('idle')
+    }
   })
 
   return (
