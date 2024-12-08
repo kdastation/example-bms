@@ -1,7 +1,9 @@
 import { useState } from 'react'
 
 import { Board, type Shape, type Tool } from '@shared/ui/Board'
+import { Flex } from '@shared/ui/Flex'
 
+import { ShapesList } from '../packages/ShapesList'
 import { ToolsShapes } from '../packages/ToolShapes'
 
 const initialShapes: Shape[] = [
@@ -171,51 +173,17 @@ export const Root = () => {
             }
           }}
         >
-          <Board.DragDropElement
-            shape={{
-              type: 'image',
-              rotation: 0,
-              scale: {
-                x: 1,
-                y: 1,
-              },
-              height: 400,
-              width: 400,
-              src: 'https://static.insales-cdn.com/images/products/1/7222/329129014/2._%D0%BC%D0%B8%D0%BD%D1%8C%D0%BE%D0%BD_610%D1%85850_%D0%BC%D0%BC.jpg',
-            }}
-          >
-            <div
-              style={{
-                color: 'red',
-              }}
-            >
-              миньон
-            </div>
-          </Board.DragDropElement>
+          <Flex gap={30} align={'start'}>
+            <Board.Board tool={tool} selected={selected} shapes={shapes} />
 
-          <Board.DragDropElement
-            shape={{
-              type: 'text',
-              rotation: 0,
-              scale: {
-                x: 1,
-                y: 1,
-              },
-              height: 30,
-              width: 300,
-              text: 'asdsadadasdadadadada',
-              color: 'red',
-            }}
-          >
-            <div
-              style={{
-                color: 'red',
+            <ShapesList
+              selected={selected}
+              onSelect={(id) => {
+                setSelected([id])
               }}
-            >
-              Текст
-            </div>
-          </Board.DragDropElement>
-          <Board.Board tool={tool} selected={selected} shapes={shapes} />
+              shapes={shapes}
+            />
+          </Flex>
 
           <div
             style={{

@@ -6,6 +6,7 @@ import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import { Slot } from '@radix-ui/react-slot'
 
+import { isNull } from '../../../../is'
 import { useEventsPublic } from '../Events/Public'
 import { useScene } from '../Scene/SceneProvider'
 import { type DragDropShape } from '../Shape'
@@ -19,6 +20,12 @@ const DragDropProvider = ({ children }: { children: ReactNode }) => {
     <DndContext
       onDragEnd={(event) => {
         const stage = stageRef.current
+
+        const hasCollisionWithContainer = !isNull(event.collisions) && event.collisions.length > 0
+
+        if (!hasCollisionWithContainer) {
+          return
+        }
 
         const newShape = event.active.data.current.shape as DragDropShape
 
@@ -66,7 +73,16 @@ const Container = ({ children }: { children: ReactNode }) => {
     id: 'droppable',
   })
 
-  return <div ref={setNodeRef}>{children}</div>
+  return (
+    <div
+      style={{
+        width: 'fit-content',
+      }}
+      ref={setNodeRef}
+    >
+      {children}
+    </div>
+  )
 }
 
 const DragDropElement = ({ children, shape }: { children: ReactElement; shape: DragDropShape }) => {
