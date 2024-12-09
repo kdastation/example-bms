@@ -12,7 +12,7 @@ type Props = {
 export const Root = ({ id, onSave }: Props) => {
   const storeShapes = useStoreShapes()
 
-  const shape = storeShapes.shapes.find((shape) => shape.id === id)
+  const shape = storeShapes.getById(id)
 
   if (!shape) {
     throw new Error('Shape not found')

@@ -9,10 +9,11 @@ export type Store = {
   add: (shape: Shape) => void
   delete: (id: string) => void
   update: (id, shape: DeepPartial<Shape>) => void
+  getById: (id: string) => Shape | undefined
 }
 
 export const useStore = create<Store>(
-  immer<Store>((set) => ({
+  immer<Store>((set, get) => ({
     shapes: [],
     add: (shape) => {
       set((state) => {
@@ -36,6 +37,9 @@ export const useStore = create<Store>(
           return shape
         })
       })
+    },
+    getById: (id: string) => {
+      return get().shapes.find((shape) => shape.id === id)
     },
   }))
 )
