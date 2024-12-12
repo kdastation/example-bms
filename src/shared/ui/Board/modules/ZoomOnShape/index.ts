@@ -1,0 +1,1 @@
+export { useZoomOnShape } from './useZoomOnShape'

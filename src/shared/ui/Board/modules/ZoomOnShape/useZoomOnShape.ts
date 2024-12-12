@@ -1,4 +1,4 @@
-import { useScene } from './packages/Scene/SceneProvider'
+import { useScene } from '../../packages/Scene/SceneProvider'
 
 export const useZoomOnShape = () => {
   const { stageRef } = useScene()

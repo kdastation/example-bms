@@ -1,6 +1,6 @@
 import { DragDrop } from './modules/DragDrop'
+import { useZoomOnShape } from './modules/ZoomOnShape'
 import { Root, RootBoard } from './Root'
-import { useZoomOnShape } from './utils'
 
 export { type Shape } from './model/types/Shape'
 
