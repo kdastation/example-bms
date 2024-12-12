@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid'
 
 import { type Shape, type ShapeAttrs } from '../../model/types/Shape'
+import { createCard } from '../../packages/ShapeCreators'
 import { useEventsPublic } from '../Events/Public'
 import { Arrow } from './Arrow'
 import { Card } from './Card'
 import { Circle } from './Circle'
-import { createCard } from './creators'
 import { Image } from './Image'
 import { Line } from './Line'
 import { Rectangle } from './Rectangle'

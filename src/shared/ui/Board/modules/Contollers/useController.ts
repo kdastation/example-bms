@@ -1,5 +1,5 @@
+import { createArrow, createLine, createRectangle } from '../../packages/ShapeCreators'
 import { useEventsPublic } from '../Events/Public'
-import { createArrow, createLine, createRectangle } from '../Shapes/creators'
 import { type Controller } from './Controller'
 import { useArrowController } from './useArrowController'
 import { useMiltyLineController } from './useMultiLineController'
