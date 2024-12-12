@@ -1,7 +1,7 @@
 import type Konva from 'konva'
 import { Arrow as KonvaArrow } from 'react-konva'
 
-import { type ArrowData, type ShapeAttrs } from '../Shape'
+import { type ArrowData, type ShapeAttrs } from '../../model/types/Shape'
 import { generateShapeName, useDragShape, useTransformShape } from '../utils'
 
 type Events = {

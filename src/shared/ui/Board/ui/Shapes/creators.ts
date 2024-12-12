@@ -1,7 +1,12 @@
 import merge from 'lodash/merge'
 import { v4 as uuidv4 } from 'uuid'
 
-import { type ArrowShape, type CardShape, type LineShape, type RectangleShape } from '../Shape'
+import {
+  type ArrowShape,
+  type CardShape,
+  type LineShape,
+  type RectangleShape,
+} from '../../model/types/Shape'
 import { distanceTwoPoints } from '../utils'
 
 export const createLine = (

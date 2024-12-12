@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Circle, Group, Rect } from 'react-konva'
 
 import { callAllHandlers } from '../../../../react/lib/callAllHandlers'
-import { type CardData, type ShapeAttrs } from '../Shape'
+import { type CardData, type ShapeAttrs } from '../../model/types/Shape'
 import { generateShapeName, useDragShape, useTransformShape } from '../utils'
 
 type Events = {

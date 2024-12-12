@@ -5,7 +5,7 @@ import { Html } from 'react-konva-utils'
 import TextareaAutosize from 'react-textarea-autosize'
 
 import { mergeRefs } from '../../../../react/lib/mergeRefs'
-import { type ShapeAttrs, type TextData } from '../Shape'
+import { type ShapeAttrs, type TextData } from '../../model/types/Shape'
 import { generateShapeName, useDragShape, useTransformShape } from '../utils'
 
 type Events = {

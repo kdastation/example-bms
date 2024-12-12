@@ -2,7 +2,7 @@ import { DragDrop } from './ui/DragDrop/DragDrop'
 import { Root, RootBoard } from './ui/Root'
 import { useZoomOnShape } from './ui/utils'
 
-export { type Shape } from './ui/Shape'
+export { type Shape } from './model/types/Shape'
 
 export { type StateController as Tool } from './ui/Contollers/useController'
 

@@ -1,5 +1,5 @@
+import { type Shape, type ShapeAttrs } from '../../../model/types/Shape'
 import { type StateController } from '../../Contollers/useController'
-import { type Shape, type ShapeAttrs } from '../../Shape'
 
 export type EventChangeAttrs = {
   type: 'change-attrs'

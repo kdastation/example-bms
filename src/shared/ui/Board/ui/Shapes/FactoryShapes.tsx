@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
+import { type Shape, type ShapeAttrs } from '../../model/types/Shape'
 import { useEventsPublic } from '../Events/Public'
-import { type Shape, type ShapeAttrs } from '../Shape'
 import { Arrow } from './Arrow'
 import { Card } from './Card'
 import { Circle } from './Circle'
