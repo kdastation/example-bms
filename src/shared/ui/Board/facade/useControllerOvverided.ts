@@ -1,8 +1,11 @@
 import { useController, type StateController } from '../modules/Contollers'
 import { useEventsPublic } from '../modules/Events/Public'
+import { useSelectedShapes } from '../modules/SelectStore'
 import { createArrow, createLine, createRectangle } from '../packages/ShapeCreators'
 
-export const useControllerOvverided = (state: StateController, selectedShapes: string[]) => {
+export const useControllerOvverided = (state: StateController) => {
+  const { selectedShapes } = useSelectedShapes()
+
   const { onEvent } = useEventsPublic()
 
   return useController(state, {

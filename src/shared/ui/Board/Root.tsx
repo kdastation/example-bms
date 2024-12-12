@@ -9,20 +9,15 @@ import { type Shape } from './model/types/Shape'
 import { useZoomController, type StateController } from './modules/Contollers'
 import { DragDrop } from './modules/DragDrop'
 import { EventsPublicProvider, type OnEvent } from './modules/Events/Public'
+import { SelectedShapesProvider, useSelectedShapes } from './modules/SelectStore'
 import { StageStoreProvider, useStageStore } from './modules/StageStore'
 import { Transform } from './modules/Transform'
 import { SceneProvider, useScene } from './packages/Scene/SceneProvider'
 
-const Board = ({
-  shapes,
-  selected,
-  tool,
-}: {
-  shapes: Shape[]
-  selected: string[]
-  tool: StateController
-}) => {
+const Board = ({ shapes, tool }: { shapes: Shape[]; tool: StateController }) => {
   const { stageRef } = useScene()
+
+  const { selectedShapes } = useSelectedShapes()
 
   const { ref, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>()
 
@@ -30,7 +25,7 @@ const Board = ({
 
   const { setStage, ...stage } = stageStore((state) => state)
 
-  const { elements, stageProps } = useControllerOvverided(tool, selected)
+  const { elements, stageProps } = useControllerOvverided(tool)
 
   const { onWheel } = useZoomController({
     onZoom: setStage,
@@ -54,14 +49,14 @@ const Board = ({
       >
         <Layer>
           {shapes.map((shape) => {
-            return <OvveridedFactoryShape selected={selected} key={shape.id} shape={shape} />
+            return <OvveridedFactoryShape key={shape.id} shape={shape} />
           })}
 
           {elements}
         </Layer>
 
         <Layer>
-          <Transform ids={selected} />
+          <Transform ids={selectedShapes} />
         </Layer>
       </Stage>
     </DragDrop.Container>
@@ -111,8 +106,10 @@ type Props = {
 
 export const RootBoard = ({ ...props }: Props) => {
   return (
-    <StageStoreProvider>
-      <Board {...props} />
-    </StageStoreProvider>
+    <SelectedShapesProvider selectedShapes={props.selected}>
+      <StageStoreProvider>
+        <Board {...props} />
+      </StageStoreProvider>
+    </SelectedShapesProvider>
   )
 }
