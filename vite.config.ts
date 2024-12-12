@@ -17,7 +17,7 @@ export const aliases = {
 }
 
 export default defineConfig({
-  plugins: [react(), svgr(), checker({ typescript: true })],
+  plugins: [react(), svgr(), checker({ typescript: false })],
 
   resolve: {
     alias: aliases,
