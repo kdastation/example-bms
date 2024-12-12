@@ -1,4 +1,4 @@
-import { DragDrop } from './modules/DragDrop/DragDrop'
+import { DragDrop } from './modules/DragDrop'
 import { Root, RootBoard } from './Root'
 import { useZoomOnShape } from './utils'
 

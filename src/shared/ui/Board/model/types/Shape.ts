@@ -77,29 +77,6 @@ export type ArrowShape = ArrowData & {
   type: 'arrow'
 }
 
-export type DragDropRectangleShape = Omit<RectangleShape, 'x' | 'y' | 'id'>
-
-export type DragDropCircleShape = Omit<CircleShape, 'x' | 'y' | 'id'>
-
-export type DragDropArrowShape = Omit<ArrowShape, 'x' | 'y' | 'id'>
-
-export type DragDropCardShape = Omit<CardShape, 'x' | 'y' | 'id'>
-
-export type DragDropLineShape = Omit<LineShape, 'x' | 'y' | 'id'>
-
-export type DragDropTextShape = Omit<TextShape, 'x' | 'y' | 'id'>
-
-export type DragDropImageShape = Omit<ImageShape, 'x' | 'y' | 'id'>
-
-export type DragDropShape =
-  | DragDropRectangleShape
-  | DragDropCircleShape
-  | DragDropArrowShape
-  | DragDropCardShape
-  | DragDropLineShape
-  | DragDropTextShape
-  | DragDropImageShape
-
 export type Shape =
   | RectangleShape
   | ImageShape
