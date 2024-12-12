@@ -3,7 +3,8 @@ import React from 'react'
 import { Circle as KonvaCircle } from 'react-konva'
 
 import { type CircleData, type ShapeAttrs } from '../../model/types/Shape'
-import { generateShapeName, useDragShape, useTransformShape } from '../utils'
+import { generateShapeName } from '../../packages/utils/utils'
+import { useDragShape, useTransformShape } from './lib/controls'
 
 type Events = {
   onChange: (args: ShapeAttrs) => void

@@ -3,7 +3,8 @@ import { Image as ReactKonvaImage } from 'react-konva'
 import useImage from 'use-image'
 
 import { type ImageData, type ShapeAttrs } from '../../model/types/Shape'
-import { generateShapeName, useDragShape, useTransformShape } from '../utils'
+import { generateShapeName } from '../../packages/utils/utils'
+import { useDragShape, useTransformShape } from './lib/controls'
 
 type Events = {
   onChange: (args: ShapeAttrs) => void

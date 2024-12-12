@@ -15,8 +15,8 @@ import { Slot } from '@radix-ui/react-slot'
 import { isNull } from '../../../../is'
 import { mergeRefs } from '../../../../react/lib/mergeRefs'
 import { type DragDropShape } from '../../model/types/Shape'
+import { useScene } from '../../packages/Scene/SceneProvider'
 import { useEventsPublic } from '../Events/Public'
-import { useScene } from '../Scene/SceneProvider'
 
 const DragDropProvider = ({ children }: { children: ReactNode }) => {
   const { stageRef } = useScene()

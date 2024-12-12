@@ -7,7 +7,7 @@ import {
   type LineShape,
   type RectangleShape,
 } from '../../model/types/Shape'
-import { distanceTwoPoints } from '../utils'
+import { distanceTwoPoints } from '../../packages/utils/utils'
 
 export const createLine = (
   args: Omit<LineShape, 'type' | 'height' | 'width' | 'x' | 'y' | 'scale' | 'id' | 'rotation'>

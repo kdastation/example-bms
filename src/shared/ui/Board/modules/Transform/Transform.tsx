@@ -2,7 +2,7 @@ import type Konva from 'konva'
 import React, { useEffect, useRef } from 'react'
 import { Transformer } from 'react-konva'
 
-import { useScene } from './Scene/SceneProvider'
+import { useScene } from '../../packages/Scene/SceneProvider'
 
 export const Transform = ({ ids }: { ids: string[] }) => {
   const { stageRef } = useScene()

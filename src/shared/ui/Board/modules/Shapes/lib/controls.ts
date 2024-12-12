@@ -1,30 +1,7 @@
 import type Konva from 'konva'
 import { useRef } from 'react'
 
-import { isTruthy } from '../../../is'
-import { useScene } from './Scene/SceneProvider'
-
 import Vector2d = Konva.Vector2d
-
-export const generateShapeName = (
-  name: string,
-  {
-    canSelect,
-  }: {
-    canSelect?: boolean
-  }
-) => {
-  const names = [name, canSelect && 'selectable'].filter(isTruthy)
-
-  return names.join(' ')
-}
-
-export const getShapesCanBeSelect = (stage: Konva.Stage) => {
-  return stage.find((node) => {
-    return node.hasName('selectable')
-  })
-}
-
 export const useTransformShape = <T extends Konva.Shape>({
   onChange,
   formatScale = true,
@@ -87,47 +64,5 @@ export const useDragShape = ({
         y: e.target.y(),
       })
     },
-  }
-}
-
-export const distanceTwoPoints = ({
-  x1,
-  y1,
-  x2,
-  y2,
-}: {
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-}): number => {
-  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
-}
-
-export const useZoomOnShape = () => {
-  const { stageRef } = useScene()
-
-  return (id: string) => {
-    const stage = stageRef.current
-
-    if (!stage) {
-      return
-    }
-
-    const shape = stage.findOne(`#${id}`)
-
-    if (!shape) {
-      console.error('Not found shape')
-      return
-    }
-
-    const box = shape.getClientRect()
-
-    stage.to({
-      x: -shape.getPosition().x + stage.width() / 2 - box.width / 2,
-      y: -shape.getPosition().y + stage.height() / 2 - box.height / 2,
-      scaleX: 1,
-      scaleY: 1,
-    })
   }
 }

@@ -2,7 +2,8 @@ import type Konva from 'konva'
 import { Line as KonvaLine } from 'react-konva'
 
 import { type LineData, type ShapeAttrs } from '../../model/types/Shape'
-import { generateShapeName, useDragShape, useTransformShape } from '../utils'
+import { generateShapeName } from '../../packages/utils/utils'
+import { useDragShape, useTransformShape } from './lib/controls'
 
 type Events = {
   onChange: (args: ShapeAttrs) => void

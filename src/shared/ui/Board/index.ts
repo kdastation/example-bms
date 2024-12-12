@@ -1,10 +1,10 @@
-import { DragDrop } from './ui/DragDrop/DragDrop'
-import { Root, RootBoard } from './ui/Root'
-import { useZoomOnShape } from './ui/utils'
+import { DragDrop } from './modules/DragDrop/DragDrop'
+import { Root, RootBoard } from './Root'
+import { useZoomOnShape } from './utils'
 
 export { type Shape } from './model/types/Shape'
 
-export { type StateController as Tool } from './ui/Contollers/useController'
+export { type StateController as Tool } from './modules/Contollers/useController'
 
 export const Board = {
   Root,
