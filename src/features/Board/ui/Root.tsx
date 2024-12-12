@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import { useStoreShapes } from '@entities/Shape'
 
 import { useEventListener } from '@shared/react/hooks/useEventListener'
 import { Board, utils } from '@shared/ui/Board'
 import { Flex } from '@shared/ui/Flex'
+import { ResizePanel } from '@shared/ui/ResizePanel'
 
 import { useCreateShape } from '../packages/Create'
 import { useDelete } from '../packages/Delete'
@@ -15,6 +15,8 @@ import { ShapesList } from '../packages/ShapesList'
 import { Tools, type Tool } from '../packages/Tools'
 import { ToolsShapes } from '../packages/ToolShapes'
 import { useUpdate } from '../packages/Update'
+
+import styles from './styles.module.scss'
 
 const OverridedShapesList = () => {
   const selectedShapes = apiSelectShapes.useGetSelectedIds()
@@ -95,57 +97,33 @@ const Root = () => {
         }
       }}
     >
-      <div
-        style={{
-          padding: '40px',
-          height: '100%',
-        }}
-      >
-        <PanelGroup direction={'horizontal'}>
-          <Panel defaultSize={5} minSize={5}>
+      <div className={styles.container}>
+        <ResizePanel.Root direction={'horizontal'}>
+          <ResizePanel.Item defaultSize={5} minSize={5}>
             <Tools selectedTool={tool} onSelect={setTool} />
-          </Panel>
-          <PanelResizeHandle
-            style={{
-              width: '8px',
-              background: '#39414d',
-            }}
-          />
+          </ResizePanel.Item>
 
-          <Panel defaultSize={30} minSize={20}>
-            <div
-              style={{
-                height: '78%',
-                border: '1px solid black',
-                marginBottom: '32px',
-              }}
-            >
+          <ResizePanel.Handle />
+
+          <ResizePanel.Item defaultSize={30} minSize={20}>
+            <div className={styles.board_container}>
               <Board.Board tool={tool} selected={selectedShapes} shapes={shapes} />
             </div>
 
             <ToolsShapes />
-          </Panel>
+          </ResizePanel.Item>
 
-          <PanelResizeHandle
-            style={{
-              width: '8px',
-              background: '#39414d',
-            }}
-          />
-          <Panel defaultSize={10} minSize={10}>
+          <ResizePanel.Handle />
+
+          <ResizePanel.Item defaultSize={10} minSize={10}>
             <Flex align={'start'}>
               <OverridedShapesList />
             </Flex>
-          </Panel>
+          </ResizePanel.Item>
 
-          <PanelResizeHandle
-            style={{
-              width: '8px',
-              background: '#39414d',
-            }}
-          />
+          <ResizePanel.Handle />
 
-          <Panel defaultsize={20} minSize={10}>
+          <ResizePanel.Item defaultSize={20} minSize={10}>
             {selectedShapes.length === 1 && (
               <InfoTab
                 id={selectedShapes[0]}
@@ -154,8 +132,8 @@ const Root = () => {
                 }}
               />
             )}
-          </Panel>
-        </PanelGroup>
+          </ResizePanel.Item>
+        </ResizePanel.Root>
       </div>
     </Board.Root>
   )
