@@ -14,14 +14,18 @@ import { Slot } from '@radix-ui/react-slot'
 
 import { isNull } from '../../../../is'
 import { mergeRefs } from '../../../../react/lib/mergeRefs'
+import { type Shape } from '../../model/types/Shape'
 import { useScene } from '../../packages/Scene/SceneProvider'
-import { useEventsPublic } from '../Events/Public'
 import { type DragDropShape } from './model/types'
 
-const DragDropProvider = ({ children }: { children: ReactNode }) => {
+const DragDropProvider = ({
+  children,
+  onDropShape,
+}: {
+  children: ReactNode
+  onDropShape?: (shape: Shape) => void
+}) => {
   const { stageRef } = useScene()
-
-  const { onEvent } = useEventsPublic()
 
   return (
     <DndContext
@@ -49,24 +53,13 @@ const DragDropProvider = ({ children }: { children: ReactNode }) => {
 
           const id = uuidv4().toString()
 
-          onEvent?.({
-            type: 'add-shape',
-            shape: merge(newShape, {
+          onDropShape?.(
+            merge(newShape, {
               x: pointerPosition.x,
               y: pointerPosition.y,
               id,
-            }),
-          })
-
-          onEvent?.({
-            type: 'select',
-            ids: [id],
-          })
-
-          onEvent?.({
-            type: 'change-tool',
-            tool: 'idle',
-          })
+            })
+          )
         }, 0)
       }}
     >

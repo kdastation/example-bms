@@ -1,4 +1,5 @@
 import type Konva from 'konva'
+import merge from 'lodash/merge'
 import React, { useRef, type ReactNode } from 'react'
 import { Layer, Stage } from 'react-konva'
 import useResizeObserver from 'use-resize-observer'
@@ -10,7 +11,7 @@ import { DragDrop } from './modules/DragDrop'
 import { EventsPublicProvider, type OnEvent } from './modules/Events/Public'
 import { FactoryShapes } from './modules/Shapes/FactoryShapes'
 import { StageStoreProvider, useStageStore } from './modules/StageStore'
-import { Transform } from './modules/Transform/Transform'
+import { Transform } from './modules/Transform'
 import { SceneProvider, useScene } from './packages/Scene/SceneProvider'
 
 const Board = ({
@@ -82,7 +83,26 @@ export const Root = ({ onEvent, children }: { onEvent?: OnEvent; children: React
       }}
     >
       <SceneProvider stageRef={stageRef}>
-        <DragDrop.Provider>{children}</DragDrop.Provider>
+        <DragDrop.Provider
+          onDropShape={(shape) => {
+            onEvent?.({
+              type: 'add-shape',
+              shape: shape,
+            })
+
+            onEvent?.({
+              type: 'select',
+              ids: [shape.id],
+            })
+
+            onEvent?.({
+              type: 'change-tool',
+              tool: 'idle',
+            })
+          }}
+        >
+          {children}
+        </DragDrop.Provider>
       </SceneProvider>
     </EventsPublicProvider>
   )
