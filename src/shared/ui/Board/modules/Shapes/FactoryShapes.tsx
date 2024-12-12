@@ -9,7 +9,7 @@ import { Line } from './Line'
 import { Rectangle } from './Rectangle'
 import { Text } from './Text'
 
-type Props = {
+export type Props = {
   shape: Shape
   selected: string[]
   onChangeAttrsShape?: (shapeAttrs: ShapeAttrs) => void

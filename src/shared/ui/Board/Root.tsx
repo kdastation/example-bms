@@ -3,16 +3,15 @@ import React, { useRef, type ReactNode } from 'react'
 import { Layer, Stage } from 'react-konva'
 import useResizeObserver from 'use-resize-observer'
 
+import { OvveridedFactoryShape } from './facade/OvveridedFactoryShapes'
+import { useControllerOvverided } from './facade/useControllerOvverided'
 import { type Shape } from './model/types/Shape'
-import { useController, type StateController } from './modules/Contollers/useController'
-import { useZoomController } from './modules/Contollers/useZoomController'
+import { useZoomController, type StateController } from './modules/Contollers'
 import { DragDrop } from './modules/DragDrop'
-import { EventsPublicProvider, useEventsPublic, type OnEvent } from './modules/Events/Public'
-import { FactoryShapes } from './modules/Shapes/FactoryShapes'
+import { EventsPublicProvider, type OnEvent } from './modules/Events/Public'
 import { StageStoreProvider, useStageStore } from './modules/StageStore'
 import { Transform } from './modules/Transform'
 import { SceneProvider, useScene } from './packages/Scene/SceneProvider'
-import { createArrow, createLine, createRectangle } from './packages/ShapeCreators'
 
 const Board = ({
   shapes,
@@ -29,98 +28,9 @@ const Board = ({
 
   const stageStore = useStageStore()
 
-  const { onEvent } = useEventsPublic()
-
   const { setStage, ...stage } = stageStore((state) => state)
 
-  const { elements, stageProps } = useController(tool, {
-    select: {
-      onSelect: (ids) => {
-        onEvent?.({
-          type: 'select',
-          ids,
-        })
-      },
-      selected,
-    },
-    target: {
-      onTarget: ({ x, y }) => {
-        const newRectangle = createRectangle({
-          scale: {
-            x: 1,
-            y: 1,
-          },
-          width: 400,
-          height: 400,
-          x,
-          y,
-          fill: '#4387b1',
-          rotation: 0,
-        })
-
-        onEvent?.({
-          type: 'add-shape',
-          shape: newRectangle,
-        })
-
-        onEvent?.({
-          type: 'select',
-          ids: [newRectangle.id],
-        })
-
-        onEvent?.({
-          type: 'change-tool',
-          tool: 'idle',
-        })
-      },
-    },
-    arrow: {
-      onAdd: (points) => {
-        const newArrow = createArrow({
-          points: [points.start.x, points.start.y, points.end.x, points.end.y],
-          stroke: 'red',
-        })
-
-        onEvent?.({
-          type: 'add-shape',
-          shape: newArrow,
-        })
-
-        onEvent?.({
-          type: 'select',
-          ids: [newArrow.id],
-        })
-
-        onEvent?.({
-          type: 'change-tool',
-          tool: 'idle',
-        })
-      },
-    },
-    multiLine: {
-      onAdd: (points) => {
-        const newLine = createLine({
-          points,
-          stroke: 'red',
-        })
-
-        onEvent?.({
-          type: 'add-shape',
-          shape: newLine,
-        })
-
-        onEvent?.({
-          type: 'select',
-          ids: [newLine.id],
-        })
-
-        onEvent?.({
-          type: 'change-tool',
-          tool: 'idle',
-        })
-      },
-    },
-  })
+  const { elements, stageProps } = useControllerOvverided(tool, selected)
 
   const { onWheel } = useZoomController({
     onZoom: setStage,
@@ -144,65 +54,7 @@ const Board = ({
       >
         <Layer>
           {shapes.map((shape) => {
-            return (
-              <FactoryShapes
-                onChangeAttrsShape={(shapeAttrs) => {
-                  onEvent?.({
-                    type: 'change-attrs',
-                    attrs: shapeAttrs,
-                  })
-                }}
-                onEndChangeText={(shapeId, newText) => {
-                  onEvent?.({
-                    type: 'end-change-text',
-                    newText: newText,
-                    id: shapeId,
-                  })
-
-                  onEvent?.({
-                    type: 'select',
-                    ids: [shapeId],
-                  })
-
-                  setTimeout(() => {
-                    onEvent?.({
-                      type: 'change-tool',
-                      tool: 'idle',
-                    })
-                  }, 100)
-                }}
-                onStartChangeText={(shapeId) => {
-                  onEvent?.({
-                    type: 'start-change-text',
-                    id: shapeId,
-                  })
-
-                  onEvent?.({
-                    type: 'select',
-                    ids: [],
-                  })
-
-                  onEvent?.({
-                    type: 'change-tool',
-                    tool: 'edit-text',
-                  })
-                }}
-                onAddNewCardShape={(newCardShape) => {
-                  onEvent?.({
-                    type: 'add-shape',
-                    shape: newCardShape,
-                  })
-
-                  onEvent?.({
-                    type: 'select',
-                    ids: [newCardShape.id],
-                  })
-                }}
-                selected={selected}
-                key={shape.id}
-                shape={shape}
-              />
-            )
+            return <OvveridedFactoryShape selected={selected} key={shape.id} shape={shape} />
           })}
 
           {elements}
