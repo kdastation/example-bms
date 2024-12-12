@@ -1,1 +1,1 @@
-export { FactoryShapes, type Props as FactoryShapesProps } from './FactoryShapes'
+export { FactoryShape, type Props as FactoryShapeProps } from './FactoryShapes'

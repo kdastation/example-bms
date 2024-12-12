@@ -18,7 +18,7 @@ export type Props = {
   onAddNewCardShape?: (cardShape: CardShape) => void
 }
 
-export const FactoryShapes = ({
+export const FactoryShape = ({
   shape,
   selected,
   onChangeAttrsShape,

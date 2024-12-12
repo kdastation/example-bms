@@ -1,14 +1,14 @@
 import { useEventsPublic } from '../modules/Events/Public'
 import { useSelectedShapes } from '../modules/SelectStore'
-import { FactoryShapes, type FactoryShapesProps } from '../modules/Shapes'
+import { FactoryShape, type FactoryShapeProps } from '../modules/Shapes'
 
-export const OvveridedFactoryShape = ({ shape }: Pick<FactoryShapesProps, 'shape'>) => {
+export const OvveridedFactoryShape = ({ shape }: Pick<FactoryShapeProps, 'shape'>) => {
   const { selectedShapes } = useSelectedShapes()
 
   const { onEvent } = useEventsPublic()
 
   return (
-    <FactoryShapes
+    <FactoryShape
       shape={shape}
       selected={selectedShapes}
       onChangeAttrsShape={(shapeAttrs) => {
