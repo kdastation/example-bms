@@ -1,4 +1,4 @@
-import React, { useMemo, type ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 
 import { useEventCallback } from '../../../../../react/hooks/useEventCallback'
 import { createContext } from '../../../../../react/lib/createContext'

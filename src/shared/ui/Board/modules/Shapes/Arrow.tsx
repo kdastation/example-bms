@@ -13,7 +13,6 @@ type Props = ArrowData & Events
 
 export const Arrow = ({
   points,
-  fill,
   canDrag = true,
   canSelect = true,
   stroke,
@@ -43,7 +42,6 @@ export const Arrow = ({
     <KonvaArrow
       ref={refShapeForTransform}
       points={points}
-      fill={fill}
       stroke={stroke}
       strokeWidth={8}
       name={generateShapeName('arrow', {

@@ -8,11 +8,11 @@ export type Store = {
   shapes: Shape[]
   add: (shape: Shape) => void
   delete: (id: string) => void
-  update: (id, shape: DeepPartial<Shape>) => void
+  update: (id: string, shape: DeepPartial<Shape>) => void
   getById: (id: string) => Shape | undefined
 }
 
-export const useStore = create<Store>(
+export const useStore = create(
   immer<Store>((set, get) => ({
     shapes: [],
     add: (shape) => {

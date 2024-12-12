@@ -12,7 +12,7 @@ type Store = {
 }
 
 const createStore = () => {
-  return create<Store>(
+  return create(
     immer<Store>((set) => ({
       ids: [],
       select: (ids) => {

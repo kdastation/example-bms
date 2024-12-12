@@ -40,7 +40,6 @@ export const InfoText = ({ values, onSave }: Props) => {
               <NumberInput
                 minValue={8}
                 maxValue={30}
-                type='number'
                 value={value ?? values.fontSize}
                 onChange={onChange}
               />

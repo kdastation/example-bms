@@ -1,7 +1,8 @@
 import type Konva from 'konva'
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Transformer } from 'react-konva'
 
+import { isTruthy } from '../../../../is'
 import { useScene } from '../../packages/Scene/SceneProvider'
 
 export const Transform = ({ ids }: { ids: string[] }) => {
@@ -18,7 +19,7 @@ export const Transform = ({ ids }: { ids: string[] }) => {
       return
     }
 
-    const nodes = ids.map((id) => stage.findOne(`#${id}`))
+    const nodes = ids.map((id) => stage.findOne(`#${id}`)).filter(isTruthy)
 
     transformer.nodes(nodes)
   }, [ids])

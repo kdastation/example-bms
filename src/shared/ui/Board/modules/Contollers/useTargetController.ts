@@ -1,6 +1,3 @@
-import type Konva from 'konva'
-import { type MouseEvent } from 'react'
-
 import { type Controller } from './Controller'
 
 export type TargetControllerArgs = {
@@ -10,7 +7,7 @@ export type TargetControllerArgs = {
 export const useTargetController = ({ onTarget }: TargetControllerArgs): Controller => {
   return {
     stageProps: {
-      onMouseUp: (e: Konva.KonvaEventObject<MouseEvent>) => {
+      onMouseUp: (e) => {
         onTarget?.({
           x: e.target.getRelativePointerPosition()?.x as number,
           y: e.target.getRelativePointerPosition()?.y as number,

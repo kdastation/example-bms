@@ -1,5 +1,5 @@
 import type Konva from 'konva'
-import React, { useRef, type ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 import { Layer, Stage } from 'react-konva'
 import useResizeObserver from 'use-resize-observer'
 

@@ -124,7 +124,7 @@ const Root = () => {
           <ResizePanel.Item defaultSize={20} minSize={10}>
             {selectedShapes.length === 1 && (
               <InfoTab
-                id={selectedShapes[0]}
+                id={selectedShapes[0]!}
                 onSave={(id, values) => {
                   updateShapes(id, values)
                 }}

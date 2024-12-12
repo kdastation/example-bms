@@ -17,7 +17,7 @@ export const generateShapeName = (
 }
 
 export const getShapesCanBeSelect = (stage: Konva.Stage) => {
-  return stage.find((node) => {
+  return stage.find((node: Konva.Node) => {
     return node.hasName('selectable')
   })
 }

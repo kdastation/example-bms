@@ -1,5 +1,4 @@
 import type Konva from 'konva'
-import { type WheelEvent } from 'react'
 
 import { isNumber } from '../../../../is'
 

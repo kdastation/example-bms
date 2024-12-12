@@ -75,8 +75,6 @@ export const Card = ({
         onTransformEnd={callAllHandlers(onTransformEnd, () => {
           setCanVisiblePoint(true)
         })}
-        x={props.x}
-        y={props.y}
         name={generateShapeName('card', {
           canSelect,
         })}

@@ -36,12 +36,12 @@
       "@features/*": ["features/*"],
       "@pages/*": ["pages/*"],
       "@app/*": ["app/*"],
-      "@widgets/*": ["widgets/*"],
+      "@widgets/*": ["widgets/*"]
     },
     "types": ["vite/client"],
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": ["src", "src/custom.d.ts", "**/*.config.ts", "**/*.config.js", "@types"],
+  "include": ["src", "src/custom.d.ts", "**/*.config.js", "@types"],
   "exclude": ["node_modules"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
-

@@ -32,7 +32,7 @@ export const createLine = (
       stroke: 'red',
     },
     other
-  )
+  ) as LineShape
 }
 
 export const createRectangle = (args: Omit<RectangleShape, 'type' | 'id'>): RectangleShape => {
@@ -44,7 +44,7 @@ export const createRectangle = (args: Omit<RectangleShape, 'type' | 'id'>): Rect
       type: 'rectangle',
     },
     args
-  )
+  ) as RectangleShape
 }
 
 export const createArrow = (
@@ -63,16 +63,16 @@ export const createArrow = (
       rotation: 0,
       points,
       width: distanceTwoPoints({
-        x1: points[0],
-        y1: points[1],
-        x2: points[3],
-        y2: points[4],
+        x1: points[0]!,
+        y1: points[1]!,
+        x2: points[2]!,
+        y2: points[3]!,
       }),
       height: distanceTwoPoints({
-        x1: points[0],
-        y1: points[1],
-        x2: points[3],
-        y2: points[4],
+        x1: points[0]!,
+        y1: points[1]!,
+        x2: points[2]!,
+        y2: points[3]!,
       }),
       scale: {
         x: 1,
@@ -81,7 +81,7 @@ export const createArrow = (
       stroke: 'red',
     },
     other
-  )
+  ) as ArrowShape
 }
 
 export const createCard = (args: CardShape): CardShape => {

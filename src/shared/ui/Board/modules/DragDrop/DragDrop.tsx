@@ -1,11 +1,5 @@
 import merge from 'lodash/merge'
-import React, {
-  forwardRef,
-  useId,
-  type CSSProperties,
-  type ReactElement,
-  type ReactNode,
-} from 'react'
+import { forwardRef, useId, type CSSProperties, type ReactElement, type ReactNode } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
@@ -38,7 +32,7 @@ const DragDropProvider = ({
           return
         }
 
-        const newShape = event.active.data.current.shape as DragDropShape
+        const newShape = (event.active.data.current as { shape: DragDropShape }).shape
 
         if (!stage) {
           return

@@ -1,8 +1,7 @@
 import type Konva from 'konva'
-import React from 'react'
 import { Rect } from 'react-konva'
 
-import { type ShapeAttrs } from '../../model/types/Shape'
+import { type RectangleData, type ShapeAttrs } from '../../model/types/Shape'
 import { generateShapeName } from '../../packages/utils/utils'
 import { useDragShape, useTransformShape } from './lib/controls'
 
@@ -10,7 +9,7 @@ type Events = {
   onChange: (args: ShapeAttrs) => void
 }
 
-type Props = ShapeAttrs & Events
+type Props = RectangleData & Events
 
 export const Rectangle = ({
   onChange,

@@ -27,21 +27,13 @@ export const InfoImage = ({ values, onSave }: Props) => {
     <Flex asChild direction={'column'} gap={12} align={'start'}>
       <form
         onSubmit={handleSubmit((values) => {
-          console.log(values)
           onSave?.(values)
         })}
       >
         <Controller
           control={control}
           render={({ field: { value, onChange } }) => {
-            return (
-              <NumberInput
-                minValue={0}
-                type='number'
-                value={value ?? values.width}
-                onChange={onChange}
-              />
-            )
+            return <NumberInput minValue={0} value={value ?? values.width} onChange={onChange} />
           }}
           name={'width'}
         />
@@ -57,14 +49,7 @@ export const InfoImage = ({ values, onSave }: Props) => {
         <Controller
           control={control}
           render={({ field: { value, onChange } }) => {
-            return (
-              <NumberInput
-                minValue={0}
-                type='number'
-                value={value ?? values.height}
-                onChange={onChange}
-              />
-            )
+            return <NumberInput minValue={0} value={value ?? values.height} onChange={onChange} />
           }}
           name={'height'}
         />
@@ -72,9 +57,7 @@ export const InfoImage = ({ values, onSave }: Props) => {
         <Controller
           control={control}
           render={({ field: { value, onChange } }) => {
-            return (
-              <NumberInput type='number' value={value ?? values.rotation} onChange={onChange} />
-            )
+            return <NumberInput value={value ?? values.rotation} onChange={onChange} />
           }}
           name={'rotation'}
         />

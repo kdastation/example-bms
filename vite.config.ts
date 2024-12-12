@@ -1,5 +1,6 @@
 import path from 'path'
 import { defineConfig } from 'vite'
+import checker from 'vite-plugin-checker'
 import svgr from 'vite-plugin-svgr'
 
 import react from '@vitejs/plugin-react'
@@ -16,7 +17,7 @@ export const aliases = {
 }
 
 export default defineConfig({
-  plugins: [react(), svgr()],
+  plugins: [react(), svgr(), checker({ typescript: true })],
 
   resolve: {
     alias: aliases,

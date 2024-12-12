@@ -1,5 +1,5 @@
 import type Konva from 'konva'
-import { useState, type MouseEvent } from 'react'
+import { useState } from 'react'
 import { Line } from 'react-konva'
 
 import { isNull } from '../../../../is'
@@ -18,7 +18,7 @@ export const useMiltyLineController = ({ onAdd }: MultiLineControllerArgs): Cont
 
   return {
     stageProps: {
-      onMouseDown(e: Konva.KonvaEventObject<MouseEvent>) {
+      onMouseDown(e) {
         const stage = e.target.getStage() as Konva.Stage | null
 
         if (!stage) {
@@ -46,7 +46,7 @@ export const useMiltyLineController = ({ onAdd }: MultiLineControllerArgs): Cont
           setPointsMove(null)
         }
       },
-      onMouseMove(e: Konva.KonvaEventObject<MouseEvent>) {
+      onMouseMove(e) {
         const stage = e.target.getStage() as Konva.Stage | null
 
         if (!stage) {

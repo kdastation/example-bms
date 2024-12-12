@@ -1,5 +1,4 @@
 import type Konva from 'konva'
-import React from 'react'
 import { Circle as KonvaCircle } from 'react-konva'
 
 import { type CircleData, type ShapeAttrs } from '../../model/types/Shape'

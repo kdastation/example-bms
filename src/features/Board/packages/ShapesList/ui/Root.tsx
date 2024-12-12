@@ -22,7 +22,7 @@ export const Root = ({ onSelect, selected }: Props) => {
       {shapes.map((shape) => {
         return (
           <Card
-            isSelected={recordSelected[shape.id]}
+            isSelected={Boolean(recordSelected[shape.id])}
             onClick={() => {
               onSelect?.(shape.id)
             }}

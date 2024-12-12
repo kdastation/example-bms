@@ -1,10 +1,10 @@
 import type Konva from 'konva'
-import React, { useMemo, type ReactNode, type RefObject } from 'react'
+import { useMemo, type ReactNode, type RefObject } from 'react'
 
 import { createContext } from '../../../../react/lib/createContext'
 
 export type Scene = {
-  stageRef: RefObject<Konva.Stage | null>
+  stageRef: RefObject<Konva.Stage>
 }
 
 const [SceneContextProvider, useScene] = createContext<Scene>({

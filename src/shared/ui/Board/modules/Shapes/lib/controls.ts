@@ -1,8 +1,7 @@
 import type Konva from 'konva'
 import { useRef } from 'react'
 
-import Vector2d = Konva.Vector2d
-export const useTransformShape = <T extends Konva.Shape>({
+export const useTransformShape = <T extends Konva.Node>({
   onChange,
   formatScale = true,
 }: {
@@ -42,7 +41,7 @@ export const useTransformShape = <T extends Konva.Shape>({
       width: Math.max(5, node.width() * scaleX),
       height: Math.max(node.height() * scaleY),
       rotation: node.rotation(),
-      scale: node.scale() as Vector2d,
+      scale: node.scale() as Konva.Vector2d,
     })
   }
 

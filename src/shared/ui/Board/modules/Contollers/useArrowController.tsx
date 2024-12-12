@@ -1,5 +1,5 @@
 import type Konva from 'konva'
-import { useState, type MouseEvent } from 'react'
+import { useState } from 'react'
 import { Arrow } from 'react-konva'
 
 import { isNull } from '../../../../is'
@@ -27,7 +27,7 @@ export const useArrowController = ({ onAdd }: ArrowControllerArgs): Controller =
 
   return {
     stageProps: {
-      onMouseDown(e: Konva.KonvaEventObject<MouseEvent>) {
+      onMouseDown(e) {
         const stage = e.target.getStage() as Konva.Stage | null
 
         if (!stage) {
@@ -47,7 +47,7 @@ export const useArrowController = ({ onAdd }: ArrowControllerArgs): Controller =
           },
         })
       },
-      onMouseMove(e: Konva.KonvaEventObject<MouseEvent>) {
+      onMouseMove(e) {
         const stage = e.target.getStage() as Konva.Stage | null
 
         if (!stage) {
