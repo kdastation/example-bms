@@ -1,4 +1,4 @@
-import { type Shape } from '@entities/Shape'
+import { useStoreShapes } from '@entities/Shape'
 
 import { listToRecord } from '@shared/lib/lisToRecord'
 import { Flex } from '@shared/ui/Flex'
@@ -6,12 +6,15 @@ import { Flex } from '@shared/ui/Flex'
 import { Card } from './Card'
 
 export type Props = {
-  shapes: Shape[]
   onSelect?: (id: string) => void
   selected?: string[]
 }
 
-export const Root = ({ shapes, onSelect, selected }: Props) => {
+export const Root = ({ onSelect, selected }: Props) => {
+  const storeShapes = useStoreShapes()
+
+  const shapes = storeShapes.shapes
+
   const recordSelected = listToRecord(selected || [], (id) => id)
 
   return (

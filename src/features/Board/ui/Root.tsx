@@ -16,10 +16,6 @@ import { ToolsShapes } from '../packages/ToolShapes'
 import { useUpdate } from '../packages/Update'
 
 const OverridedShapesList = () => {
-  const storeShapes = useStoreShapes()
-
-  const shapes = storeShapes.shapes
-
   const selectedShapes = apiSelectShapes.useGetSelectedIds()
 
   const selectShapes = apiSelectShapes.useSelect()
@@ -28,7 +24,6 @@ const OverridedShapesList = () => {
 
   return (
     <ShapesList
-      shapes={shapes}
       selected={selectedShapes}
       onSelect={(id) => {
         selectShapes?.(id)
