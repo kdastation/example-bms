@@ -1,5 +1,4 @@
 import merge from 'lodash/merge'
-import { v4 as uuidv4 } from 'uuid'
 
 import {
   type ArrowShape,
@@ -7,14 +6,14 @@ import {
   type LineShape,
   type RectangleShape,
 } from '../../model/types/Shape'
-import { distanceTwoPoints } from '../../packages/utils/utils'
+import { distanceTwoPoints, generateId } from '../../packages/utils/utils'
 
 export const createLine = (
   args: Omit<LineShape, 'type' | 'height' | 'width' | 'x' | 'y' | 'scale' | 'id' | 'rotation'>
 ): LineShape => {
   const { points, ...other } = args
 
-  const id = uuidv4().toString()
+  const id = generateId()
 
   return merge(
     {
@@ -37,7 +36,7 @@ export const createLine = (
 }
 
 export const createRectangle = (args: Omit<RectangleShape, 'type' | 'id'>): RectangleShape => {
-  const id = uuidv4().toString()
+  const id = generateId()
 
   return merge(
     {
@@ -51,7 +50,7 @@ export const createRectangle = (args: Omit<RectangleShape, 'type' | 'id'>): Rect
 export const createArrow = (
   args: Omit<ArrowShape, 'type' | 'height' | 'width' | 'x' | 'y' | 'scale' | 'id' | 'rotation'>
 ): ArrowShape => {
-  const id = uuidv4().toString()
+  const id = generateId()
 
   const { points, ...other } = args
 

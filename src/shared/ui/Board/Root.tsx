@@ -1,5 +1,4 @@
 import type Konva from 'konva'
-import merge from 'lodash/merge'
 import React, { useRef, type ReactNode } from 'react'
 import { Layer, Stage } from 'react-konva'
 import useResizeObserver from 'use-resize-observer'
@@ -8,7 +7,7 @@ import { type Shape } from './model/types/Shape'
 import { useController, type StateController } from './modules/Contollers/useController'
 import { useZoomController } from './modules/Contollers/useZoomController'
 import { DragDrop } from './modules/DragDrop'
-import { EventsPublicProvider, type OnEvent } from './modules/Events/Public'
+import { EventsPublicProvider, useEventsPublic, type OnEvent } from './modules/Events/Public'
 import { FactoryShapes } from './modules/Shapes/FactoryShapes'
 import { StageStoreProvider, useStageStore } from './modules/StageStore'
 import { Transform } from './modules/Transform'
@@ -28,6 +27,8 @@ const Board = ({
   const { ref, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>()
 
   const stageStore = useStageStore()
+
+  const { onEvent } = useEventsPublic()
 
   const { setStage, ...stage } = stageStore((state) => state)
 
@@ -59,7 +60,65 @@ const Board = ({
       >
         <Layer>
           {shapes.map((shape) => {
-            return <FactoryShapes selected={selected} key={shape.id} shape={shape} />
+            return (
+              <FactoryShapes
+                onChangeAttrsShape={(shapeAttrs) => {
+                  onEvent?.({
+                    type: 'change-attrs',
+                    attrs: shapeAttrs,
+                  })
+                }}
+                onEndChangeText={(shapeId, newText) => {
+                  onEvent?.({
+                    type: 'end-change-text',
+                    newText: newText,
+                    id: shapeId,
+                  })
+
+                  onEvent?.({
+                    type: 'select',
+                    ids: [shapeId],
+                  })
+
+                  setTimeout(() => {
+                    onEvent?.({
+                      type: 'change-tool',
+                      tool: 'idle',
+                    })
+                  }, 100)
+                }}
+                onStartChangeText={(shapeId) => {
+                  onEvent?.({
+                    type: 'start-change-text',
+                    id: shapeId,
+                  })
+
+                  onEvent?.({
+                    type: 'select',
+                    ids: [],
+                  })
+
+                  onEvent?.({
+                    type: 'change-tool',
+                    tool: 'edit-text',
+                  })
+                }}
+                onAddNewCardShape={(newCardShape) => {
+                  onEvent?.({
+                    type: 'add-shape',
+                    shape: newCardShape,
+                  })
+
+                  onEvent?.({
+                    type: 'select',
+                    ids: [newCardShape.id],
+                  })
+                }}
+                selected={selected}
+                key={shape.id}
+                shape={shape}
+              />
+            )
           })}
 
           {elements}

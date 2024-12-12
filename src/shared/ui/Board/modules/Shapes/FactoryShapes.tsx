@@ -1,8 +1,6 @@
-import { v4 as uuidv4 } from 'uuid'
-
-import { type Shape, type ShapeAttrs } from '../../model/types/Shape'
+import { type CardShape, type Shape, type ShapeAttrs } from '../../model/types/Shape'
 import { createCard } from '../../packages/ShapeCreators'
-import { useEventsPublic } from '../Events/Public'
+import { generateId } from '../../packages/utils/utils'
 import { Arrow } from './Arrow'
 import { Card } from './Card'
 import { Circle } from './Circle'
@@ -14,16 +12,22 @@ import { Text } from './Text'
 type Props = {
   shape: Shape
   selected: string[]
+  onChangeAttrsShape?: (shapeAttrs: ShapeAttrs) => void
+  onStartChangeText?: (shapeId: string) => void
+  onEndChangeText?: (shapeId: string, newText: string) => void
+  onAddNewCardShape?: (cardShape: CardShape) => void
 }
 
-export const FactoryShapes = ({ shape, selected }: Props) => {
-  const { onEvent } = useEventsPublic()
-
+export const FactoryShapes = ({
+  shape,
+  selected,
+  onChangeAttrsShape,
+  onStartChangeText,
+  onEndChangeText,
+  onAddNewCardShape,
+}: Props) => {
   const handleChangeShape = (attrs: ShapeAttrs) => {
-    onEvent?.({
-      attrs: attrs,
-      type: 'change-attrs',
-    })
+    onChangeAttrsShape?.(attrs)
   }
 
   switch (shape.type) {
@@ -45,39 +49,10 @@ export const FactoryShapes = ({ shape, selected }: Props) => {
           {...shape}
           onChange={handleChangeShape}
           onStartChangeText={() => {
-            onEvent?.({
-              type: 'start-change-text',
-              id: shape.id,
-            })
-
-            onEvent?.({
-              type: 'select',
-              ids: [],
-            })
-
-            onEvent?.({
-              type: 'change-tool',
-              tool: 'edit-text',
-            })
+            onStartChangeText?.(shape.id)
           }}
           onEndChangeText={(newText) => {
-            onEvent?.({
-              type: 'end-change-text',
-              newText: newText,
-              id: shape.id,
-            })
-
-            onEvent?.({
-              type: 'select',
-              ids: [shape.id],
-            })
-
-            setTimeout(() => {
-              onEvent?.({
-                type: 'change-tool',
-                tool: 'idle',
-              })
-            }, 100)
+            onEndChangeText?.(shape.id, newText)
           }}
         />
       )
@@ -91,15 +66,11 @@ export const FactoryShapes = ({ shape, selected }: Props) => {
             shape.canCreateNewCard ? selected.length === 1 && selected.includes(shape.id) : false
           }
           onAddCard={(newCardAttrs) => {
-            //TODO: add generate id
-            const id = uuidv4().toString()
-
-            onEvent?.({
-              type: 'add-shape',
-              shape: createCard({
+            onAddNewCardShape?.(
+              createCard({
                 type: 'card',
                 rotation: 0,
-                id: id,
+                id: generateId(),
                 fill: shape.fill,
                 canCreateNewCard: true,
                 scale: {
@@ -107,13 +78,8 @@ export const FactoryShapes = ({ shape, selected }: Props) => {
                   y: 1,
                 },
                 ...newCardAttrs,
-              }),
-            })
-
-            onEvent?.({
-              type: 'select',
-              ids: [id],
-            })
+              })
+            )
           }}
         />
       )

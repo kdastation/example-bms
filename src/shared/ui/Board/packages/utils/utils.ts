@@ -1,4 +1,5 @@
 import type Konva from 'konva'
+import { v4 as uuidv4 } from 'uuid/dist/esm'
 
 import { isTruthy } from '../../../../is'
 
@@ -33,4 +34,8 @@ export const distanceTwoPoints = ({
   y2: number
 }): number => {
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+}
+
+export const generateId = () => {
+  return uuidv4().toString()
 }
