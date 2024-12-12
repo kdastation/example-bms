@@ -37,6 +37,21 @@ const OverridedShapesList = () => {
   )
 }
 
+const useKeyboardController = () => {
+  const selectedShapes = apiSelectShapes.useGetSelectedIds()
+
+  const selectShapes = apiSelectShapes.useSelect()
+
+  const deleteShapes = useDelete()
+
+  useEventListener('keydown', (event) => {
+    if (event.key === 'Delete' && selectedShapes.length > 0) {
+      deleteShapes(selectedShapes)
+      selectShapes([])
+    }
+  })
+}
+
 const Root = () => {
   const [tool, setTool] = useState<Tool>('idle')
 
@@ -48,28 +63,11 @@ const Root = () => {
 
   const selectShapes = apiSelectShapes.useSelect()
 
-  const deleteShapes = useDelete()
-
   const updateShapes = useUpdate()
 
   const createShape = useCreateShape()
 
-  useEventListener('keydown', (event) => {
-    if (event.key === 'Delete' && selectedShapes.length > 0) {
-      deleteShapes(selectedShapes)
-      selectShapes([])
-    }
-
-    if (event.code === 'Space') {
-      setTool('drag')
-    }
-  })
-
-  useEventListener('keyup', (event) => {
-    if (event.code === 'Space') {
-      setTool('idle')
-    }
-  })
+  useKeyboardController()
 
   return (
     <Board.Root
