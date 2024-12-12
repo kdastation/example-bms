@@ -7,6 +7,7 @@ import { useEventListener } from '@shared/react/hooks/useEventListener'
 import { Board, utils } from '@shared/ui/Board'
 import { Flex } from '@shared/ui/Flex'
 
+import { useCreateShape } from '../packages/Create'
 import { useDelete } from '../packages/Delete'
 import { InfoTab } from '../packages/InfoShape'
 import { apiSelectShapes, ProviderSelectShapes } from '../packages/Select'
@@ -49,6 +50,8 @@ const Root = () => {
 
   const updateShapes = useUpdate()
 
+  const createShape = useCreateShape()
+
   useEventListener('keydown', (event) => {
     if (event.key === 'Delete' && selectedShapes.length > 0) {
       deleteShapes(selectedShapes)
@@ -78,7 +81,7 @@ const Root = () => {
         }
 
         if (event.type === 'add-shape') {
-          storeShapes.add(event.shape)
+          createShape(event.shape)
         }
 
         if (event.type === 'change-tool') {
